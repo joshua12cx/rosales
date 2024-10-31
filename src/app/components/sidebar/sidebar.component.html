@@ -1,48 +1,51 @@
-<!-- Contenedor para el botón de hamburguesa y el sidebar -->
-<div class="d-flex">
-  <!-- Botón de hamburguesa -->
-  <button class="btn btn-outline-primary sidebar-toggle" (click)="toggleSidebar()">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<!-- Sidebar -->
+<div class="d-flex flex-column sidebar bg-light p-3" [ngClass]="{ 'closed': !isSidebarOpen }">
+  <!-- Contenedor de usuario -->
+  <div class="d-flex align-items-center mb-3">
+    <i class="bi bi-person-circle me-2" style="font-size: 2rem;"></i>
+    <h3 class="text-center" *ngIf="isSidebarOpen">{{ username }}</h3>
+  </div>
 
-  <!-- Sidebar -->
-  <div class="d-flex flex-column sidebar bg-light p-3" [ngClass]="{ 'closed': !isSidebarOpen }">
-    <h3 class="text-center">Consultorio Rosales</h3>
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link active" routerLink="/dashboard">
-          <i class="bi bi-house-door me-2"></i>
-          <span class="sidebar-text" *ngIf="isSidebarOpen">Inicio</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/pacientes">
-          <i class="bi bi-person me-2"></i>
-          <span class="sidebar-text" *ngIf="isSidebarOpen">Pacientes</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/citas">
-          <i class="bi bi-calendar me-2"></i>
-          <span class="sidebar-text" *ngIf="isSidebarOpen">Citas</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/pagos">
-          <i class="bi bi-credit-card me-2"></i>
-          <span class="sidebar-text" *ngIf="isSidebarOpen">Pagos</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/ajustes">
-          <i class="bi bi-gear me-2"></i>
-          <span class="sidebar-text" *ngIf="isSidebarOpen">Ajustes</span>
-        </a>
-      </li>
-    </ul>
-    <hr>
-    <div class="mt-auto text-center">
-      <button class="btn btn-danger" (click)="logout()">Cerrar Sesión</button>
-    </div>
+  <!-- Opciones de navegación -->
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/home/dashboard">
+        <i class="bi bi-house-door me-2"></i>
+        <span class="sidebar-text" *ngIf="isSidebarOpen">Inicio</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home/pacientes">
+        <i class="bi bi-person me-2"></i>
+        <span class="sidebar-text" *ngIf="isSidebarOpen">Pacientes</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home/citas">
+        <i class="bi bi-calendar me-2"></i>
+        <span class="sidebar-text" *ngIf="isSidebarOpen">Citas</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home/pagos">
+        <i class="bi bi-credit-card me-2"></i>
+        <span class="sidebar-text" *ngIf="isSidebarOpen">Pagos</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home/ajustes">
+        <i class="bi bi-gear me-2"></i>
+        <span class="sidebar-text" *ngIf="isSidebarOpen">Ajustes</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="mt-auto text-center">
+    <button class="btn btn-danger" (click)="logout()">Cerrar Sesión</button>
   </div>
 </div>
+
+<!-- Botón de hamburguesa fuera del sidebar -->
+<button class="btn btn-outline-primary sidebar-toggle" (click)="toggleSidebar()">
+  <span class="navbar-toggler-icon"></span>
+</button>

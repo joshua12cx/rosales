@@ -7,13 +7,23 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FormsModule } from '@angular/forms';
+import { DashboardComponent } from './modal/dashboard/dashboard.component';
+import { PacientesComponent } from './modal/pacientes/pacientes.component';
+import { CitasComponent } from './modal/citas/citas.component';
+import { PagosComponent } from './modal/pagos/pagos.component';
+import { AjustesComponent } from './modal/ajustes/ajustes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    SidebarComponent
+    SidebarComponent,
+    DashboardComponent,
+    PacientesComponent,
+    CitasComponent,
+    PagosComponent,
+    AjustesComponent
   ],
   imports: [
     BrowserModule,

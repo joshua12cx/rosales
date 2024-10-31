@@ -1,0 +1,13 @@
+/* Estilo cuando el sidebar está abierto */
+.content-container {
+    margin-left: 250px; /* Margen izquierdo cuando el sidebar está abierto */
+    width: calc(100% - 250px);
+    transition: margin-left 0.3s, width 0.3s; /* Suaviza la transición */
+  }
+  
+  /* Estilo cuando el sidebar está cerrado */
+  .content-container.sidebar-closed {
+    margin-left: 60px; /* Ajuste del margen cuando el sidebar está cerrado */
+    width: calc(100% - 60px);
+  }
+  

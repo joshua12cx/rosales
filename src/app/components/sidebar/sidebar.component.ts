@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,16 +6,33 @@ import { Router } from '@angular/router';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent {
-  isSidebarOpen = true;
+export class SidebarComponent implements OnInit {
+  isSidebarOpen: boolean = true; // Controla si el sidebar está abierto o cerrado
+  username: string = 'Usuario'; // Inicialización por defecto
+
+  // Evento que se emite al componente padre cuando el sidebar cambia de estado
+  @Output() sidebarToggled = new EventEmitter<boolean>();
 
   constructor(private router: Router) {}
 
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
+  ngOnInit(): void {
+    this.getUsername();
   }
 
-  logout() {
-    this.router.navigate(['/login']);
+  toggleSidebar(): void {
+    // Cambia el estado del sidebar al hacer clic en el botón de hamburguesa
+    this.isSidebarOpen = !this.isSidebarOpen;
+    this.sidebarToggled.emit(this.isSidebarOpen); // Emitimos el nuevo estado
+  }
+
+  getUsername(): void {
+    // Obtiene el nombre del usuario desde el almacenamiento local
+    this.username = localStorage.getItem('username') || 'Usuario';
+  }
+
+  logout(): void {
+    // Al cerrar sesión, elimina el nombre del usuario del almacenamiento local
+    localStorage.removeItem('username');
+    this.router.navigate(['/login']); // Redirige al usuario a la página de inicio de sesión
   }
 }

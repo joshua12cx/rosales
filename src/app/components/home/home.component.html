@@ -1,7 +1,11 @@
 <div class="d-flex">
-  <app-sidebar></app-sidebar>
-  <div class="content p-4">
-    <!-- Aquí va el contenido de cada vista -->
+  <!-- Contenedor del sidebar -->
+  <div class="sidebar-container">
+    <app-sidebar (sidebarToggled)="onSidebarToggle($event)"></app-sidebar>
+  </div>
+
+  <!-- Contenedor del contenido principal -->
+  <div class="content-container p-4" [ngClass]="{ 'sidebar-closed': !isSidebarOpen }">
     <router-outlet></router-outlet>
   </div>
 </div>

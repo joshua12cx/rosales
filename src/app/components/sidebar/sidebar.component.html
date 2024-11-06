@@ -9,7 +9,7 @@
   <!-- Opciones de navegación -->
   <ul class="nav flex-column">
     <li class="nav-item">
-      <a class="nav-link active" routerLink="/home/dashboard">
+      <a class="nav-link active" routerLink="/home">
         <i class="bi bi-house-door me-2"></i>
         <span class="sidebar-text" *ngIf="isSidebarOpen">Inicio</span>
       </a>
@@ -46,6 +46,6 @@
 </div>
 
 <!-- Botón de hamburguesa fuera del sidebar -->
-<button class="btn btn-outline-primary sidebar-toggle" (click)="toggleSidebar()">
-  <span class="navbar-toggler-icon"></span>
+<button class="btn btn-outline-black sidebar-toggle" (click)="toggleSidebar()">
+  <i class="bi bi-layout-sidebar-inset"></i>
 </button>

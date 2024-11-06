@@ -1,3 +1,4 @@
+
 <div class="d-flex">
   <!-- Contenedor del sidebar -->
   <div class="sidebar-container">
@@ -6,6 +7,7 @@
 
   <!-- Contenedor del contenido principal -->
   <div class="content-container p-4" [ngClass]="{ 'sidebar-closed': !isSidebarOpen }">
-    <router-outlet></router-outlet>
+    <router-outlet>
+    </router-outlet>
   </div>
 </div>

@@ -1,1 +1,107 @@
-<p>pacientes works!</p>
+<div class="container mt-4">
+    <!-- Formulario de búsqueda -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="DNI" aria-label="Búsqueda por DNI">
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Ingrese el número de H.C" aria-label="Búsqueda por H.C">
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Ingrese los nombres" aria-label="Búsqueda por nombres">
+        </div>
+        <div class="col-md-3 text-end">
+            <button class="btn btn-primary">Nuevo Paciente</button>
+        </div>
+    </div>
+
+    <!-- Tabla de pacientes -->
+    <table class="table table-striped align-middle">
+        <thead class="table-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Nro de Historia</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>48573926</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>10</td>
+                <td>...</td>
+                <td>
+                    <button class="btn btn-primary btn-sm">Editar</button>
+                    <button class="btn btn-danger btn-sm">Eliminar</button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>95731682</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>11</td>
+                <td>...</td>
+                <td>
+                    <button class="btn btn-primary btn-sm">Editar</button>
+                    <button class="btn btn-danger btn-sm">Eliminar</button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>twitter</td>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>12</td>
+                <td>...</td>
+                <td>
+                    <button class="btn btn-primary btn-sm">Editar</button>
+                    <button class="btn btn-danger btn-sm">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    
+</div>
+
+
+
+<!-- 
+<div class="kenny">
+    <table class="personal-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>psEx</th>
+                <th>destinatario</th>
+                <th>distrito</th>
+                <th>direccion</th>
+                <th>hora inicio</th>
+                <th>hora fin</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let tienda of tiendas | filterTienda: searchText">
+                <td>{{tienda.nombreTienda}}</td>
+                <td>{{tienda.psEx}}</td>
+                <td>{{tienda.destinatario}}</td>
+                <td>{{tienda.distrito}}</td>
+                <td>{{tienda.direccion}}</td>
+                <td>{{tienda.horaInicio}}</td>
+                <td>{{tienda.horaFin}}</td>
+                <td>
+                    <button class="edit-btn" (click)="abrirModalEditarRolCargo(tienda)">✏️</button>
+                    <button class="delete-btn" (click)="deleteItem(tienda.tienda_id)">🗑️</button>
+                </td>
+            </tr>
+        </tbody>
+    </table> -->

@@ -15,12 +15,12 @@
 .sidebar-toggle {
   position: fixed;
   top: 15px;
-  left: 250px;
+  left: 200px;
   transition: left 0.3s;
 }
 
 .sidebar.closed + .sidebar-toggle {
-  left: 60px; /* Ajusta la posición del botón cuando el sidebar está cerrado */
+  left: 50px; /* Ajusta la posición del botón cuando el sidebar está cerrado */
 }
 
 /* Ocultar el texto cuando el sidebar está cerrado */
@@ -30,4 +30,8 @@
 
 .sidebar.closed .sidebar-text {
   display: none; /* Oculta el texto cuando el sidebar está cerrado */
+}
+
+span{
+  color: black;
 }

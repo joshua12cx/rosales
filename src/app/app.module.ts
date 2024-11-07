@@ -23,7 +23,8 @@ import { AjustesComponent } from './modal/ajustes/ajustes.component';
     PacientesComponent,
     CitasComponent,
     PagosComponent,
-    AjustesComponent
+    AjustesComponent,
+
   ],
   imports: [
     BrowserModule,

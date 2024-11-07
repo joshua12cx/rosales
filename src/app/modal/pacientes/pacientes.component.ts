@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrl: './pacientes.component.css'
 })
 export class PacientesComponent {
+  isOpenModal = false;
+  emitirFunction: Function = () => {};
+  openModal() {
+    this.isOpenModal = true;
+  }
 
+  uniqueFunction($event: Function) {
+    this.emitirFunction = $event;
+  }
 }

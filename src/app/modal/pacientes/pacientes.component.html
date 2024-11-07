@@ -11,7 +11,7 @@
             <input type="text" class="form-control" placeholder="Ingrese los nombres" aria-label="Búsqueda por nombres">
         </div>
         <div class="col-md-3 text-end">
-            <button class="btn btn-primary">Nuevo Paciente</button>
+            <button class="btn btn-primary" (click)="openModal()">Nuevo Paciente</button>
         </div>
     </div>
 
@@ -73,6 +73,9 @@
 </div>
 
 
+<app-modal [buttonFunction]="emitirFunction" title="Primera prueva" buttonName="Actualizar" [(isOpenModal)]="isOpenModal">
+    <app-paciente-modal ($emitirFunction)="uniqueFunction($event)"></app-paciente-modal>
+</app-modal>
 
 <!-- 
 <div class="kenny">

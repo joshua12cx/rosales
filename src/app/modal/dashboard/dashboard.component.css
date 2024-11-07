@@ -3,3 +3,15 @@
     
 }
     
+.titulo-principal {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 3rem;               /* Tamaño grande */
+    color: #fff;                   /* Color blanco */
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semitransparente */
+    padding: 20px;                 /* Espaciado alrededor del texto */
+    border-radius: 10px;           /* Bordes redondeados */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Sombra de texto */
+    display: inline-block;         /* Ajusta el ancho al contenido */
+    margin-top: 20px;              /* Espaciado desde arriba */
+  }
+  

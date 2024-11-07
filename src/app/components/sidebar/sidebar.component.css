@@ -4,10 +4,15 @@
   transition: width 0.3s ease;
   position: fixed;
   height: 100vh;
+  border-right: 2px solid #ddd; /* Borde derecho */
+  border-top-right-radius: 10px;     /* Esquina superior redondeada */
+  border-bottom-right-radius: 10px;  /* Esquina inferior redondeada */
+
 }
 
+/* Sidebar cuando está cerrado */
 .sidebar.closed {
-  width: 60px; /* Ancho del sidebar cuando está cerrado */
+  width: 60px;
   overflow: hidden;
 }
 
@@ -20,7 +25,7 @@
 }
 
 .sidebar.closed + .sidebar-toggle {
-  left: 50px; /* Ajusta la posición del botón cuando el sidebar está cerrado */
+  left: 50px;
 }
 
 /* Ocultar el texto cuando el sidebar está cerrado */
@@ -29,9 +34,9 @@
 }
 
 .sidebar.closed .sidebar-text {
-  display: none; /* Oculta el texto cuando el sidebar está cerrado */
+  display: none;
 }
 
-span{
+span {
   color: black;
 }

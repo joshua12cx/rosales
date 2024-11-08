@@ -1,51 +1,60 @@
 <div class="container mt-4">
-    <div class="d-flex justify-content-between mb-3">
-      <h2>Lista de Citas</h2>
-      <button class="btn btn-primary" (click)="openModal()">Registrar Nueva Cita</button>
-    </div>
-  
-    <div class="row mb-3">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Busqueda por DNI" [(ngModel)]="filtroDNI">
-      </div>
-      <div class="col-md-4">
-        <input type="date" class="form-control" placeholder="Busqueda por fecha" [(ngModel)]="filtroFecha">
-      </div>
-    </div>
-  
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellidos</th>
-          <th>Nro de Historia</th>
-          <th>Estado</th>
-          <th>Opciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cita of citas; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ cita.dni }}</td>
-          <td>{{ cita.nombre }}</td>
-          <td>{{ cita.apellidos }}</td>
-          <td>{{ cita.nroHistoria }}</td>
-          <td>
-            <span [ngClass]="{'badge bg-primary': cita.estado === 'Pendiente', 'badge bg-success': cita.estado === 'Activa', 'badge bg-danger': cita.estado === 'Terminada'}">
-              {{ cita.estado }}
-            </span>
-          </td>
-          <td>
-            <button class="btn btn-info btn-sm me-1" (click)="editarCita(cita)">Editar</button>
-            <button class="btn btn-danger btn-sm" (click)="eliminarCita(i)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="d-flex justify-content-between mb-3">
+    <h2>Lista de Citas</h2>
+    <button class="btn btn-primary" (click)="openModal()">Registrar Nueva Cita</button>
   </div>
-  <!-- Modal -->
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Búsqueda por DNI" [(ngModel)]="filtroDNI">
+    </div>
+    <div class="col-md-4">
+      <input type="date" class="form-control" placeholder="Búsqueda por fecha" [(ngModel)]="filtroFecha">
+    </div>
+    <div class="col-md-4">
+      <select class="form-control" [(ngModel)]="filtroEstado">
+        <option value="">Todos los estados</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Activa">Activa</option>
+        <option value="Terminada">Terminada</option>
+      </select>
+    </div>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>DNI</th>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cita of filtrarCitas(); let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ cita.dni }}</td>
+        <td>{{ cita.nombre }}</td>
+        <td>{{ cita.apellidos }}</td>
+        <td>{{ cita.fecha | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <span [ngClass]="{'badge bg-primary': cita.estado === 'Pendiente', 'badge bg-success': cita.estado === 'Activa', 'badge bg-danger': cita.estado === 'Terminada'}">
+            {{ cita.estado }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-info btn-sm me-1" (click)="editarCita(cita)">Editar</button>
+          <button class="btn btn-danger btn-sm" (click)="eliminarCita(i)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
 <div class="modal fade" id="citaModal" tabindex="-1" aria-labelledby="citaModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -65,65 +74,36 @@
               <label for="sexo" class="form-label">Sexo</label>
               <div class="d-flex">
                 <div class="form-check me-2">
-                  <input class="form-check-input" type="radio" id="sexoF" value="F" [(ngModel)]="citaActual.sexo"  name="femenimo">
+                  <input class="form-check-input" type="radio" id="sexoF" value="F" [(ngModel)]="citaActual.sexo" name="femenino">
                   <label class="form-check-label" for="sexoF">F</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" id="sexoM" value="M" [(ngModel)]="citaActual.sexo"  name="masculino">
+                  <input class="form-check-input" type="radio" id="sexoM" value="M" [(ngModel)]="citaActual.sexo" name="masculino">
                   <label class="form-check-label" for="sexoM">M</label>
                 </div>
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-              <input type="date" id="fechaNacimiento" class="form-control" [(ngModel)]="citaActual.fechaNacimiento"  name="fecha-nacimiento">
+              <input type="date" id="fechaNacimiento" class="form-control" [(ngModel)]="citaActual.fechaNacimiento" name="fecha-nacimiento">
             </div>
           </div>
-          
           <!-- Campos de información personal -->
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="nombre" class="form-label">Nombre</label>
-              <input type="text" id="nombre" class="form-control" [(ngModel)]="citaActual.nombre"  name="nombre">
+              <input type="text" id="nombre" class="form-control" [(ngModel)]="citaActual.nombre" name="nombre">
             </div>
             <div class="col-md-6 mb-3">
               <label for="apellidos" class="form-label">Apellidos</label>
-              <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.apellidos"  name="apellido">
+              <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.apellidos" name="apellido">
             </div>
           </div>
-          
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="telefono" class="form-label">Teléfono</label>
-              <input type="text" id="telefono" class="form-control" [(ngModel)]="citaActual.telefono"  name="telefono">
-            </div>
-          </div>
-
-          <!-- Campos para información del acompañante -->
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="dniAcompanante" class="form-label">DNI del acompañante</label>
-              <input type="text" id="dniAcompanante" class="form-control" [(ngModel)]="citaActual.dniAcompanante"  name="dni-acompanante">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="nombreAcompanante" class="form-label">Nombre acompañante</label>
-              <input type="text" id="nombreAcompanante" class="form-control" [(ngModel)]="citaActual.nombreAcompanante"  name="nombre-acompanante">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="apellidoAcompanante" class="form-label">Apellido acompañante</label>
-              <input type="text" id="apellidoAcompanante" class="form-control" [(ngModel)]="citaActual.apellidoAcompanante"  name="apellido-acompanante">
-            </div>
-          </div>
-
           <!-- Campos adicionales -->
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="motivoConsulta" class="form-label">Motivo de consulta</label>
-              <textarea id="motivoConsulta" class="form-control" [(ngModel)]="citaActual.motivoConsulta"  name="motivo-consulta"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="signosSintomas" class="form-label">Signos y síntomas</label>
-              <textarea id="signosSintomas" class="form-control" [(ngModel)]="citaActual.signosSintomas"  name="signo-sintomas"></textarea>
+              <label for="fecha" class="form-label">Fecha de Cita</label>
+              <input type="date" id="fecha" class="form-control" [(ngModel)]="citaActual.fecha" name="fecha">
             </div>
           </div>
         </form>

@@ -8,13 +8,14 @@ declare var window: any;
 })
 export class CitasComponent {
   citas = [
-    { dni: '48573926', nombre: 'Mark', apellidos: 'Otto', nroHistoria: '10', estado: 'Pendiente' },
-    { dni: '95731682', nombre: 'Jacob', apellidos: 'Thornton', nroHistoria: '11', estado: 'Activa' },
-    { dni: '12856347', nombre: 'Larry', apellidos: 'the Bird', nroHistoria: '12', estado: 'Terminada' }
+    { dni: '48573926', nombre: 'Mark', apellidos: 'Otto',  fecha: '2023-11-01', estado: 'Pendiente' },
+    { dni: '95731682', nombre: 'Jacob', apellidos: 'Thornton',  fecha: '2023-11-05', estado: 'Activa' },
+    { dni: '12856347', nombre: 'Larry', apellidos: 'Bird',  fecha: '2023-11-10', estado: 'Terminada' }
   ];
 
   filtroDNI: string = '';
   filtroFecha: string = '';
+  filtroEstado: string = '';
   citaActual: any = {};
   esEdicion: boolean = false;
   modal: any;
@@ -51,5 +52,13 @@ export class CitasComponent {
 
   eliminarCita(index: number) {
     this.citas.splice(index, 1);
+  }
+
+  filtrarCitas() {
+    return this.citas.filter(cita => 
+      (this.filtroDNI ? cita.dni.includes(this.filtroDNI) : true) &&
+      (this.filtroFecha ? cita.fecha === this.filtroFecha : true) &&
+      (this.filtroEstado ? cita.estado === this.filtroEstado : true)  
+    );
   }
 }

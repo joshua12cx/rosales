@@ -1,0 +1,22 @@
+<div class="calendar">
+    <div class="calendar-header">
+      <button (click)="prevDay()">Anterior</button>
+      <h2>{{ selectedDate | date: 'fullDate' }}</h2>
+      <button (click)="nextDay()">Siguiente</button>
+    </div>
+    
+    <div class="calendar-body">
+      <div class="time-slot" *ngFor="let hour of hours">
+        <div class="hour-label">{{ hour }}</div>
+        <div class="appointments">
+          <div
+            class="appointment"
+            *ngFor="let appointment of getAppointmentsForHour(hour)"
+            [style.backgroundColor]="appointment.color">
+            {{ appointment.title }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

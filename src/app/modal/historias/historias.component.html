@@ -1,0 +1,96 @@
+<div class="container">
+    <h3 class="mt-4 mb-3">Historial de Usuario</h3>
+  
+    <!-- Filtros de búsqueda -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Buscar por DNI" [(ngModel)]="filtroDni" (input)="filtrarUsuarios()" />
+      </div>
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Buscar por Nombre" [(ngModel)]="filtroNombre" (input)="filtrarUsuarios()" />
+      </div>
+    </div>
+  
+    <!-- Botón para abrir el modal de agregar usuario -->
+    <button class="btn btn-primary mb-3" (click)="abrirModal()">Agregar Nuevo Usuario</button>
+  
+    <!-- Tabla de historial -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellidos</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuariosFiltrados">
+          <td>{{ usuario.dni }}</td>
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellidos }}</td>
+          <td>
+            <!-- Botón de opciones con menú desplegable -->
+            <div class="btn-group">
+              <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                
+              </button> 
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="visualizarUsuario(usuario)">Visualizar</a></li>
+                <li><a class="dropdown-item" (click)="editarUsuario(usuario)">Editar</a></li>
+                <li><a class="dropdown-item" (click)="eliminarUsuario(usuario)">Eliminar</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Modal para agregar/editar usuario -->
+    <div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="usuarioModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="usuarioModalLabel">Historia Clínica Estomatológica</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <!-- Campos del formulario -->
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="nombre">Nombre</label>
+                  <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre" [(ngModel)]="usuarioSeleccionado.nombre" name="nombre">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="apellidos">Apellidos</label>
+                  <input type="text" class="form-control" id="apellidos" placeholder="Ingrese el apellido" [(ngModel)]="usuarioSeleccionado.apellidos" name="apellidos">
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label for="fecha">Fecha</label>
+                  <input type="date" class="form-control" id="fecha" [(ngModel)]="usuarioSeleccionado.fecha" name="fecha">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="dni">DNI</label>
+                  <input type="text" class="form-control" id="dni" placeholder="Ingrese el DNI" [(ngModel)]="usuarioSeleccionado.dni" name="dni">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="telefono">Teléfono</label>
+                  <input type="text" class="form-control" id="telefono" placeholder="Ingrese el teléfono" [(ngModel)]="usuarioSeleccionado.telefono" name="telefono">
+                </div>
+              </div>
+  
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-purple" (click)="registrarUsuario()">Registrar Nuevo Paciente</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,39 +1,12 @@
-<!-- Barra de Navegación -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-  <div class="container-fluid">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Active</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Dropdown
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<!-- Contenido de la Lista de Citas -->
 <div class="container mt-4">
-  <div class="d-flex justify-content-between mb-3">
-    <h2>Lista de Citas</h2>
-    <button class="btn btn-primary" (click)="openModal()">Registrar Nueva Cita</button>
+  <!-- Encabezado y botón de registro -->
+  <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded bg-light">
+    <h2 class="fw-bold"><i class="bi bi-calendar-plus"></i>Citas</h2>
+    <button class="btn btn-dark" (click)="openModal()">Registrar Nueva Cita</button>
   </div>
 
-  <div class="row mb-3">
+  <!-- Filtros de búsqueda -->
+  <div class="row mb-4 p-3 rounded bg-light">
     <div class="col-md-4">
       <input type="text" class="form-control" placeholder="Búsqueda por DNI" [(ngModel)]="filtroDNI">
     </div>
@@ -50,14 +23,14 @@
     </div>
   </div>
 
-  <table class="table table-bordered">
-    <thead>
+  <!-- Tabla de citas -->
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
       <tr>
         <th>#</th>
         <th>DNI</th>
         <th>Nombre</th>
         <th>Apellidos</th>
-        <th>Fecha</th>
         <th>Estado</th>
         <th>Opciones</th>
       </tr>
@@ -68,17 +41,118 @@
         <td>{{ cita.dni }}</td>
         <td>{{ cita.nombre }}</td>
         <td>{{ cita.apellidos }}</td>
-        <td>{{ cita.fecha | date:'dd/MM/yyyy' }}</td>
         <td>
-          <span [ngClass]="{'badge bg-primary': cita.estado === 'Pendiente', 'badge bg-success': cita.estado === 'Activa', 'badge bg-danger': cita.estado === 'Terminada'}">
+          <span 
+            [ngClass]="{
+              'badge bg-primary text-white': cita.estado === 'Pendiente',
+              'badge bg-success text-white': cita.estado === 'Activa',
+              'badge bg-danger text-white': cita.estado === 'Terminada'
+            }">
             {{ cita.estado }}
           </span>
         </td>
         <td>
-          <button class="btn btn-info btn-sm me-1" (click)="editarCita(cita)">Editar</button>
-          <button class="btn btn-danger btn-sm" (click)="eliminarCita(i)">Eliminar</button>
+          <!-- Botón de opciones con menú desplegable -->
+          <div class="btn-group">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button> 
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" (click)="editarCita(cita)">Editar</a></li>
+              <li><a class="dropdown-item" (click)="eliminarCita(i)">Eliminar</a></li>
+            </ul>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
+</div>
+
+<!-- Modal para Registrar o Editar Cita -->
+<div class="modal fade" id="citaModal" tabindex="-1" aria-labelledby="citaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="citaModalLabel">{{ esEdicion ? 'Editar Cita' : 'Registrar Nueva Cita' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulario de Cita -->
+        <form>
+          <!-- Información Básica -->
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <label for="dni" class="form-label">DNI</label>
+              <input type="text" id="dni" class="form-control" [(ngModel)]="citaActual.dni" name="dni">
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="sexo" class="form-label">Sexo</label>
+              <div class="d-flex">
+                <div class="form-check me-2">
+                  <input class="form-check-input" type="radio" id="sexoF" value="F" [(ngModel)]="citaActual.sexo" name="sexo">
+                  <label class="form-check-label" for="sexoF">F</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="sexoM" value="M" [(ngModel)]="citaActual.sexo" name="sexo">
+                  <label class="form-check-label" for="sexoM">M</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" id="fechaNacimiento" class="form-control" [(ngModel)]="citaActual.fechaNacimiento" name="fechaNacimiento">
+            </div>
+          </div>
+
+          <!-- Información Personal -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" id="nombre" class="form-control" [(ngModel)]="citaActual.nombre" name="nombre">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="apellidos" class="form-label">Apellidos</label>
+              <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.apellidos" name="apellidos">
+            </div>
+          </div>
+
+          <!-- Información de Contacto -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="telefono" class="form-label">Teléfono</label>
+              <input type="text" id="telefono" class="form-control" [(ngModel)]="citaActual.telefono" name="telefono">
+            </div>
+          </div>
+
+          <!-- Información del Acompañante -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="dniAcompanante" class="form-label">DNI del Acompañante</label>
+              <input type="text" id="dniAcompanante" class="form-control" [(ngModel)]="citaActual.dniAcompanante" name="dniAcompanante">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="nombreAcompanante" class="form-label">Nombre del Acompañante</label>
+              <input type="text" id="nombreAcompanante" class="form-control" [(ngModel)]="citaActual.nombreAcompanante" name="nombreAcompanante">
+            </div>
+          </div>
+
+          <!-- Motivo de Consulta -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="motivoConsulta" class="form-label">Motivo de Consulta</label>
+              <textarea id="motivoConsulta" class="form-control" [(ngModel)]="citaActual.motivoConsulta" name="motivoConsulta"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="signosSintomas" class="form-label">Signos y Síntomas</label>
+              <textarea id="signosSintomas" class="form-control" [(ngModel)]="citaActual.signosSintomas" name="signosSintomas"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="guardarCita()">{{ esEdicion ? 'Actualizar' : 'Guardar' }}</button>
+      </div>
+    </div>
+  </div>
 </div>

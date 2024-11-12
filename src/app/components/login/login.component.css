@@ -1,0 +1,45 @@
+/* Estilo principal de la tarjeta de login */
+.login-card {
+    width: 100%;
+    max-width: 400px; /* Limita el ancho máximo */
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px;
+}
+
+/* Para pantallas muy pequeñas (teléfonos verticales) */
+@media (max-width: 576px) {
+    .login-card {
+        padding: 15px;
+        max-width: 90%; /* Usa el 90% del ancho para darle margen en móviles */
+    }
+}
+
+/* Para dispositivos pequeños y medianos (tabletas y pantallas pequeñas) */
+@media (min-width: 576px) and (max-width: 768px) {
+    .login-card {
+        padding: 20px;
+        max-width: 80%; /* Ocupa más espacio en pantallas de tabletas */
+    }
+}
+
+/* Para pantallas medianas (tabletas en horizontal) */
+@media (min-width: 768px) and (max-width: 992px) {
+    .login-card {
+        max-width: 70%;
+    }
+}
+
+/* Para pantallas grandes (laptops y desktops) */
+@media (min-width: 992px) {
+    .login-card {
+        max-width: 50%; /* Adapta el tamaño para pantallas grandes */
+    }
+}
+
+/* Para pantallas extra grandes */
+@media (min-width: 1200px) {
+    .login-card {
+        max-width: 400px; /* Mantiene el tamaño compacto en pantallas ultra grandes */
+    }
+}

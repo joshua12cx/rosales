@@ -40,3 +40,7 @@
 span {
   color: black;
 }
+
+.sidebar.closed .btn.btn-danger{
+  display: none;
+}

@@ -1,96 +1,188 @@
-<div class="container">
-    <h3 class="mt-4 mb-3">Historial de Usuario</h3>
-  
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded bg-light">
+   <h2 class="mt-4 mb-3"><i class="bi bi-file-earmark-medical"></i>Historial de Usuario</h2>
+      <!-- Botón para abrir el modal de agregar usuario -->
+      <button class="btn btn-dark" (click)="abrirModal()">Agregar Nuevo Usuario</button>
+
+  </div>
     <!-- Filtros de búsqueda -->
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Buscar por DNI" [(ngModel)]="filtroDni" (input)="filtrarUsuarios()" />
+        <!-- Filtros de búsqueda -->
+        <div class="row mb-4 p-3 rounded bg-light">
+          <div class="col-md-4">
+              <input type="text" class="form-control " placeholder="Buscar por DNI" [(ngModel)]="filtroDni" (input)="filtrarUsuarios()" />
+          </div>
+          <div class="col-md-4">
+              <input type="text" class="form-control " placeholder="Buscar por Nombre" [(ngModel)]="filtroNombre" (input)="filtrarUsuarios()" />
+          </div>
       </div>
-      <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Buscar por Nombre" [(ngModel)]="filtroNombre" (input)="filtrarUsuarios()" />
-      </div>
-    </div>
   
-    <!-- Botón para abrir el modal de agregar usuario -->
-    <button class="btn btn-primary mb-3" (click)="abrirModal()">Agregar Nuevo Usuario</button>
-  
+    
     <!-- Tabla de historial -->
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellidos</th>
-          <th>Opciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let usuario of usuariosFiltrados">
-          <td>{{ usuario.dni }}</td>
-          <td>{{ usuario.nombre }}</td>
-          <td>{{ usuario.apellidos }}</td>
-          <td>
-            <!-- Botón de opciones con menú desplegable -->
-            <div class="btn-group">
-              <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                
-              </button> 
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" (click)="visualizarUsuario(usuario)">Visualizar</a></li>
-                <li><a class="dropdown-item" (click)="editarUsuario(usuario)">Editar</a></li>
-                <li><a class="dropdown-item" (click)="eliminarUsuario(usuario)">Eliminar</a></li>
-              </ul>
+    
+      <table class="table table-hover align-middle">
+          <thead class="table-light text-center">
+              <tr>
+                  <th>DNI</th>
+                  <th>Nombre</th>
+                  <th>Apellidos</th>
+                  <th>Opciones</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let usuario of usuariosFiltrados">
+                  <td>{{ usuario.dni }}</td>
+                  <td>{{ usuario.nombre }}</td>
+                  <td>{{ usuario.apellidos }}</td>
+                  <td class="text-center">
+                      <div class="btn-group">
+                          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" (click)="visualizarUsuario(usuario)">Visualizar</a></li>
+                              <li><a class="dropdown-item" (click)="editarUsuario(usuario)">Editar</a></li>
+                              <li><a class="dropdown-item text-danger" (click)="eliminarUsuario(usuario)">Eliminar</a></li>
+                          </ul>
+                      </div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  
+  <!-- Modal para Registrar o Editar Usuario (Historia Clínica Estomatológica) -->
+<div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="usuarioModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="usuarioModalLabel">Historia Clínica Estomatológica</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!-- Información Básica -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre" [(ngModel)]="usuarioSeleccionado.nombre" name="nombre">
             </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <!-- Modal para agregar/editar usuario -->
-    <div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="usuarioModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="usuarioModalLabel">Historia Clínica Estomatológica</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="col-md-6 mb-3">
+              <label for="apellidos" class="form-label">Apellidos</label>
+              <input type="text" class="form-control" id="apellidos" placeholder="Ingrese el apellido" [(ngModel)]="usuarioSeleccionado.apellidos" name="apellidos">
+            </div>
           </div>
-          <div class="modal-body">
-            <form>
-              <!-- Campos del formulario -->
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre" [(ngModel)]="usuarioSeleccionado.nombre" name="nombre">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label for="apellidos">Apellidos</label>
-                  <input type="text" class="form-control" id="apellidos" placeholder="Ingrese el apellido" [(ngModel)]="usuarioSeleccionado.apellidos" name="apellidos">
-                </div>
-              </div>
-  
-              <div class="row">
-                <div class="col-md-4 mb-3">
-                  <label for="fecha">Fecha</label>
-                  <input type="date" class="form-control" id="fecha" [(ngModel)]="usuarioSeleccionado.fecha" name="fecha">
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="dni">DNI</label>
-                  <input type="text" class="form-control" id="dni" placeholder="Ingrese el DNI" [(ngModel)]="usuarioSeleccionado.dni" name="dni">
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="telefono">Teléfono</label>
-                  <input type="text" class="form-control" id="telefono" placeholder="Ingrese el teléfono" [(ngModel)]="usuarioSeleccionado.telefono" name="telefono">
-                </div>
-              </div>
-  
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-purple" (click)="registrarUsuario()">Registrar Nuevo Paciente</button>
-              </div>
-            </form>
+
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <label for="fecha" class="form-label">Fecha</label>
+              <input type="date" class="form-control" id="fecha" [(ngModel)]="usuarioSeleccionado.fecha" name="fecha">
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="dni" class="form-label">DNI</label>
+              <input type="text" class="form-control" id="dni" placeholder="Ingrese el DNI" [(ngModel)]="usuarioSeleccionado.dni" name="dni">
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="telefono" class="form-label">Teléfono</label>
+              <input type="text" class="form-control" id="telefono" placeholder="Ingrese el teléfono" [(ngModel)]="usuarioSeleccionado.telefono" name="telefono">
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" id="fechaNacimiento" [(ngModel)]="usuarioSeleccionado.fechaNacimiento" name="fechaNacimiento">
+            </div>
           </div>
-        </div>
+
+          <!-- Información de Contacto -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="direccion" class="form-label">Dirección</label>
+              <input type="text" class="form-control" id="direccion" placeholder="Ingrese la dirección" [(ngModel)]="usuarioSeleccionado.direccion" name="direccion">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="correo" class="form-label">Correo</label>
+              <input type="email" class="form-control" id="correo" placeholder="Ingrese el correo" [(ngModel)]="usuarioSeleccionado.correo" name="correo">
+            </div>
+          </div>
+
+          <!-- Información Adicional -->
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="ocupacion" class="form-label">Ocupación</label>
+              <input type="text" class="form-control" id="ocupacion" placeholder="Ingrese la ocupación" [(ngModel)]="usuarioSeleccionado.ocupacion" name="ocupacion">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="gradoInstructivo" class="form-label">Grado Instructivo</label>
+              <select class="form-control" id="gradoInstructivo" [(ngModel)]="usuarioSeleccionado.gradoInstructivo" name="gradoInstructivo">
+                <option value="">Seleccione el grado</option>
+                <!-- Agregar opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="religion" class="form-label">Religión</label>
+              <select class="form-control" id="religion" [(ngModel)]="usuarioSeleccionado.religion" name="religion">
+                <option value="">Seleccione la religión</option>
+                <!-- Agregar opciones según sea necesario -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Estado Civil y Acompañante -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="estadoCivil" class="form-label">Estado Civil</label>
+              <select class="form-control" id="estadoCivil" [(ngModel)]="usuarioSeleccionado.estadoCivil" name="estadoCivil">
+                <option value="">Seleccione el estado civil</option>
+                <!-- Agregar opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="acompanante" class="form-label">Acompañante</label>
+              <input type="text" class="form-control" id="acompanante" placeholder="Ingrese el nombre del acompañante" [(ngModel)]="usuarioSeleccionado.acompanante" name="acompanante">
+            </div>
+          </div>
+
+          <!-- Motivo de Consulta y Síntomas -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="motivoConsulta" class="form-label">Motivo de Consulta</label>
+              <textarea class="form-control" id="motivoConsulta" placeholder="Ingrese el motivo de la consulta" [(ngModel)]="usuarioSeleccionado.motivoConsulta" name="motivoConsulta"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="sintomas" class="form-label">Síntomas</label>
+              <textarea class="form-control" id="sintomas" placeholder="Ingrese los síntomas" [(ngModel)]="usuarioSeleccionado.sintomas" name="sintomas"></textarea>
+            </div>
+          </div>
+
+          <!-- Antecedentes y Examen Clínico -->
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="antecedentesPersonales" class="form-label">Antecedentes Personales</label>
+              <textarea class="form-control" id="antecedentesPersonales" placeholder="Ingrese antecedentes personales" [(ngModel)]="usuarioSeleccionado.antecedentesPersonales" name="antecedentesPersonales"></textarea>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="antecedentesFamiliares" class="form-label">Antecedentes Familiares</label>
+              <textarea class="form-control" id="antecedentesFamiliares" placeholder="Ingrese antecedentes familiares" [(ngModel)]="usuarioSeleccionado.antecedentesFamiliares" name="antecedentesFamiliares"></textarea>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="signosVitales" class="form-label">Signos Vitales</label>
+              <textarea class="form-control" id="signosVitales" placeholder="Ingrese signos vitales" [(ngModel)]="usuarioSeleccionado.signosVitales" name="signosVitales"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="examenClinicoGeneral" class="form-label">Examen Clínico General</label>
+              <textarea class="form-control" id="examenClinicoGeneral" placeholder="Ingrese datos" [(ngModel)]="usuarioSeleccionado.examenClinicoGeneral" name="examenClinicoGeneral"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="examenClinicoEstomatologico" class="form-label">Examen Clínico Estomatológico</label>
+              <textarea class="form-control" id="examenClinicoEstomatologico" placeholder="Ingrese datos" [(ngModel)]="usuarioSeleccionado.examenClinicoEstomatologico" name="examenClinicoEstomatologico"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-purple" (click)="registrarUsuario()">Registrar Nuevo Paciente</button>
       </div>
     </div>
   </div>
-  
+</div>

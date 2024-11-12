@@ -43,9 +43,16 @@
                 <td>{{ cita.nroHistoria }}</td>
                 <td>{{ cita.antecedentes || 'Sin antecedentes' }}</td>
                 <td>{{ cita.estado }}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm" (click)="editarCita(cita)">Editar</button>
-                    <button class="btn btn-danger btn-sm" (click)="eliminarCita(i)">Eliminar</button>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" (click)="editarCita(cita)">Editar</a></li>
+                            <li><a class="dropdown-item text-danger" (click)="eliminarCita(i)">Eliminar</a></li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         </tbody>

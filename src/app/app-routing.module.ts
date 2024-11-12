@@ -8,6 +8,8 @@ import { CitasComponent } from './modal/citas/citas.component';
 
 import { AjustesComponent } from './modal/ajustes/ajustes.component';
 import { PagosComponent } from './modal/pagos/pagos.component';
+import { HistoriasComponent } from './modal/historias/historias.component';
+import { AgendaComponent } from './modal/agenda/agenda.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirige a 'login' cuando la ruta es vacía
@@ -21,6 +23,8 @@ const routes: Routes = [
       { path: 'citas', component: CitasComponent },
       { path: 'pagos', component: PagosComponent },
       { path: 'ajustes', component: AjustesComponent },
+      {path: 'historias', component: HistoriasComponent},
+      {path:'agenda', component:AgendaComponent}
     ],
   },
   { path: '**', redirectTo: 'login' } // Redirige cualquier otra ruta no definida a 'login'

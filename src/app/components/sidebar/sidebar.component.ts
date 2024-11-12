@@ -27,7 +27,7 @@ export class SidebarComponent implements OnInit {
 
   getUsername(): void {
     // Obtiene el nombre del usuario desde el almacenamiento local
-    this.username = localStorage.getItem('username') || 'Usuario';
+    this.username = localStorage.getItem('username') || 'ramiro';
   }
 
   logout(): void {

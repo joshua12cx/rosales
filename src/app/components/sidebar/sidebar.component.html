@@ -9,31 +9,44 @@
   <!-- Opciones de navegación -->
   <ul class="nav flex-column">
     <li class="nav-item">
-      <a class="nav-link active" routerLink="/home">
-        <i class="bi bi-house-door me-2"></i>
+      <a class="nav-link active" routerLink="/home" style="color: black;">
+        <i class="bi bi-house-door  me-2"></i>
         <span class="sidebar-text" *ngIf="isSidebarOpen">Inicio</span>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="/home/pacientes">
+      <a class="nav-link" routerLink="/home/pacientes" style="color: black;">
         <i class="bi bi-person me-2"></i>
         <span class="sidebar-text" *ngIf="isSidebarOpen">Pacientes</span>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="/home/citas">
+      <a class="nav-link" routerLink="/home/citas" style="color: black;">
         <i class="bi bi-calendar me-2"></i>
         <span class="sidebar-text" *ngIf="isSidebarOpen">Citas</span>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="/home/pagos">
+      <a class="nav-link" routerLink="/home/historias" style="color: black;">
+        <i class="bi bi-file-earmark-medical me-2"></i>
+        <span class="sidebar-text" *ngIf="isSidebarOpen">Historial</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home/agenda" style="color: black;">
+        <i class="bi bi-journal-bookmark me-2"></i>
+        <span class="sidebar-text" *ngIf="isSidebarOpen">Agenda</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home/pagos" style="color: black;">
         <i class="bi bi-credit-card me-2"></i>
         <span class="sidebar-text" *ngIf="isSidebarOpen">Pagos</span>
       </a>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link" routerLink="/home/ajustes">
+      <a class="nav-link" routerLink="/home/ajustes" style="color: black;">
         <i class="bi bi-gear me-2"></i>
         <span class="sidebar-text" *ngIf="isSidebarOpen">Ajustes</span>
       </a>
@@ -41,7 +54,8 @@
   </ul>
 
   <div class="mt-auto text-center">
-    <button class="btn btn-danger" (click)="logout()">Cerrar Sesión</button>
+    <i class="bi bi-box-arrow-left me-2" routerLink="/login" style="color: black;"></i>
+    <button class="btn btn-danger" (click)="logout()">cerrar sesion</button>
   </div>
 </div>
 

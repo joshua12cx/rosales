@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Appointment } from '../../core/entities/appointment.entity';
+import { AppointmentService } from '../../core/services/appointment.service';
+import { ApiResponse } from '../../core/entities/apiresponse.entity';
+
 declare var window: any;
 
 @Component({
@@ -7,56 +11,100 @@ declare var window: any;
   styleUrls: ['./citas.component.css']
 })
 export class CitasComponent implements OnInit {
-  citas = [
-    { dni: '48573926', nombre: 'Mark', apellidos: 'Otto', fecha: '2023-11-01', estado: 'Pendiente', nroHistoria: '12345' },
-    { dni: '95731682', nombre: 'Jacob', apellidos: 'Thornton', fecha: '2023-11-05', estado: 'Activa', nroHistoria: '67890' },
-    { dni: '12856347', nombre: 'Larry', apellidos: 'Bird', fecha: '2023-11-10', estado: 'Terminada', nroHistoria: '24680' }
-  ];
-
+  citas: Appointment[] = [];
   filtroDNI: string = '';
   filtroFecha: string = '';
   filtroEstado: string = '';
-  citaActual: any = {};
+  citaActual: Appointment = new Appointment();
   esEdicion: boolean = false;
   modal: any;
 
+  constructor(private appointmentService: AppointmentService) {}
+
   ngOnInit() {
+    // Inicializa el modal cuando el componente carga
     this.modal = new window.bootstrap.Modal(document.getElementById('citaModal'));
+    this.cargarCitas();
+  }
+
+  cargarCitas() {
+    // Carga todas las citas llamando al servicio
+    this.appointmentService.getAll().subscribe((response: ApiResponse<Appointment[]>) => {
+      if (response.success) {
+        // Mapea las citas recibidas a instancias de Appointment
+        this.citas = response.data.map(cita => Object.assign(new Appointment(), cita));
+      }
+    });
   }
 
   openModal() {
-    this.citaActual = {};
-    this.esEdicion = false;
+    // Abre el modal para agregar una nueva cita
+    this.citaActual = new Appointment(); // Nueva instancia de Appointment para el formulario
+    this.esEdicion = false; // Modo de creación
     this.modal.show();
   }
 
-  editarCita(cita: any) {
-    this.citaActual = { ...cita };
-    this.esEdicion = true;
+  editarCita(cita: Appointment) {
+    // Abre el modal para editar una cita existente
+    this.citaActual = Object.assign(new Appointment(), cita); // Copia los datos de la cita seleccionada
+    this.esEdicion = true; // Modo de edición
     this.modal.show();
   }
 
   guardarCita() {
+    console.log('Datos de citaActual antes de enviar:', this.citaActual); // Verificar datos
+  
+    // Asegurar valores en appointmentDate y schedule
+    this.citaActual.appointmentDate = this.citaActual.appointmentDate || new Date().toISOString().split('T')[0];
+    this.citaActual.schedule.startTime = this.citaActual.schedule.startTime || "00:00:00";
+    this.citaActual.schedule.endTime = this.citaActual.schedule.endTime || "23:59:59";
+  
     if (this.esEdicion) {
-      const index = this.citas.findIndex(c => c.dni === this.citaActual.dni);
-      if (index !== -1) {
-        this.citas[index] = { ...this.citaActual };
-      }
+      // Llamada al servicio para actualizar la cita
+      this.appointmentService.update(this.citaActual.idAppointment, this.citaActual).subscribe(
+        () => {
+          this.cargarCitas(); // Recargar citas después de la actualización
+        },
+        (error) => {
+          console.error('Error en la actualización de la cita:', error); // Log de error si ocurre
+        }
+      );
     } else {
-      this.citas.push({ ...this.citaActual });
+      // Llamada al servicio para crear una nueva cita
+      this.appointmentService.create(this.citaActual).subscribe(
+        () => {
+          this.cargarCitas(); // Recargar citas después de la creación
+        },
+        (error) => {
+          console.error('Error en la creación de la cita:', error); // Log de error si ocurre
+        }
+      );
     }
-    this.modal.hide();
+    this.modal.hide(); // Cierra el modal después de guardar o actualizar
   }
+  
 
-  eliminarCita(index: number) {
-    this.citas.splice(index, 1);
+  eliminarCita(id: number) {
+    // Llamada al servicio para eliminar una cita por su ID
+    this.appointmentService.delete(id).subscribe(() => {
+      this.cargarCitas(); // Recargar citas después de la eliminación
+    });
   }
 
   filtrarCitas() {
+    // Filtra las citas basándose en los criterios de DNI, fecha y estado
     return this.citas.filter(cita => 
-      (this.filtroDNI ? cita.dni.includes(this.filtroDNI) : true) &&
-      (this.filtroFecha ? cita.fecha === this.filtroFecha : true) &&
-      (this.filtroEstado ? cita.estado === this.filtroEstado : true)
+      (this.filtroDNI ? cita.patient.person.dni.includes(this.filtroDNI) : true) &&
+      (this.filtroFecha ? this.formatearFecha(cita.appointmentDate) === this.filtroFecha : true) &&
+      (this.filtroEstado ? cita.state === this.filtroEstado : true)
     );
+  }
+
+  formatearFecha(fecha: Date): string {
+    // Formatea la fecha a 'YYYY-MM-DD' para la comparación
+    const year = fecha.getFullYear();
+    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+    const day = String(fecha.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

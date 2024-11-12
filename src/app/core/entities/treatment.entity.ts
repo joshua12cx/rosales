@@ -1,8 +1,7 @@
-export interface Treatment {
-    idTreatment: number;
-    treatmentName: string;
-    treatmentType: string;
-    description: string;
-    cost: number;  // Usamos 'number' para BigDecimal
-  }
-  
+export class Treatment {
+  idTreatment: number = 0;
+  treatmentName: string = '';
+  treatmentType: string = '';
+  description: string = '';
+  cost: number = 0;
+}

@@ -8,7 +8,7 @@ import { Appointment } from '../entities/appointment.entity';
   providedIn: 'root'
 })
 export class AppointmentService {
-  private apiUrl = 'http://localhost:8080/api/appointments'; // Usa una variable en environment para almacenar la URL base
+  private apiUrl = 'http://localhost:8080/api/appointments';
 
   constructor(private http: HttpClient) {}
 
@@ -35,5 +35,15 @@ export class AppointmentService {
   // Eliminar una cita
   delete(id: number): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/delete/${id}`);
+  }
+
+  // Filtrar citas por estado
+  filterByState(state: string): Observable<ApiResponse<Appointment[]>> {
+    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/filterState/${state}`);
+  }
+
+  // Filtrar citas por fecha
+  filterByDate(date: string): Observable<ApiResponse<Appointment[]>> {
+    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/filterDate/${date}`);
   }
 }

@@ -31,24 +31,26 @@
         <th>DNI</th>
         <th>Nombre</th>
         <th>Apellidos</th>
+        <th>Doctor</th>
         <th>Estado</th>
         <th>Opciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let cita of filtrarCitas(); let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ cita.dni }}</td>
-        <td>{{ cita.nombre }}</td>
-        <td>{{ cita.apellidos }}</td>
+        <td>{{ cita.idAppointment}}</td>
+        <td>{{ cita.patient.person.dni }}</td>
+        <td>{{ cita.patient.person.firstName }}</td>
+        <td>{{ cita.patient.person.lastNameFather }}{{ cita.patient.person.lastNameMother }}</td>
+        <td>{{cita.doctor.person.firstName}}</td>
         <td>
           <span 
             [ngClass]="{
-              'badge bg-primary text-white': cita.estado === 'Pendiente',
-              'badge bg-success text-white': cita.estado === 'Activa',
-              'badge bg-danger text-white': cita.estado === 'Terminada'
+              'badge bg-primary text-white': cita.state === 'Pendiente',
+              'badge bg-success text-white': cita.state === 'Activa',
+              'badge bg-danger text-white': cita.state === 'Terminada'
             }">
-            {{ cita.estado }}
+            {{ cita.state }}
           </span>
         </td>
         <td>
@@ -59,7 +61,7 @@
             </button> 
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" (click)="editarCita(cita)">Editar</a></li>
-              <li><a class="dropdown-item" (click)="eliminarCita(i)">Eliminar</a></li>
+              <li><a class="dropdown-item" (click)="eliminarCita(cita.idAppointment)">Eliminar</a></li>
             </ul>
           </div>
         </td>
@@ -83,56 +85,63 @@
           <div class="row">
             <div class="col-md-3 mb-3">
               <label for="dni" class="form-label">DNI</label>
-              <input type="text" id="dni" class="form-control" [(ngModel)]="citaActual.dni" name="dni">
+              <input type="text" id="dni" class="form-control" [(ngModel)]="citaActual.patient.person.dni" name="dni">
             </div>
             <div class="col-md-3 mb-3">
-              <label for="sexo" class="form-label">Sexo</label>
-              <div class="d-flex">
-                <div class="form-check me-2">
-                  <input class="form-check-input" type="radio" id="sexoF" value="F" [(ngModel)]="citaActual.sexo" name="sexo">
-                  <label class="form-check-label" for="sexoF">F</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" id="sexoM" value="M" [(ngModel)]="citaActual.sexo" name="sexo">
-                  <label class="form-check-label" for="sexoM">M</label>
-                </div>
-              </div>
+              <label for="estado" class="form-label">Estado</label>
+              <select id="estado" class="form-control" [(ngModel)]="citaActual.state" name="state">
+                <option value="Pendiente">Pendiente</option>
+                <option value="Activa">Activa</option>
+                <option value="Terminada">Terminada</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="fechaCita" class="form-label">Fecha de Cita</label>
+              <input type="date" id="fechaCita" class="form-control" [(ngModel)]="citaActual.appointmentDate" name="fechaNacimiento">
             </div>
             <div class="col-md-6 mb-3">
               <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-              <input type="date" id="fechaNacimiento" class="form-control" [(ngModel)]="citaActual.fechaNacimiento" name="fechaNacimiento">
+              <input type="date" id="fechaNacimiento" class="form-control" [(ngModel)]="citaActual.patient.person.birthDate" name="fechaNacimiento">
             </div>
           </div>
 
           <!-- Información Personal -->
           <div class="row">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
               <label for="nombre" class="form-label">Nombre</label>
-              <input type="text" id="nombre" class="form-control" [(ngModel)]="citaActual.nombre" name="nombre">
+              <input type="text" id="nombre" class="form-control" [(ngModel)]="citaActual.patient.person.firstName" name="firstName">
+              </div>
+            <div class="col-md-4 mb-3">
+              <label for="apellidos" class="form-label">Apellido Paterno</label>
+              <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.patient.person.lastNameFather" name="apellidos">
             </div>
             <div class="col-md-6 mb-3">
-              <label for="apellidos" class="form-label">Apellidos</label>
-              <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.apellidos" name="apellidos">
+              <label for="apellidos" class="form-label">Apellido Materno</label>
+              <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.patient.person.lastNameMother" name="apellidos">
             </div>
-          </div>
-
+          </div>  
+      
+<!-- Selección de Sexo -->
+<div class="row">
+  <div class="col-md-4 mb-3">
+    <label class="form-label">Sexo</label>
+    <div class="d-flex">
+      <div class="form-check me-2">
+        <input class="form-check-input" type="radio" id="sexoF" value="F" [(ngModel)]="citaActual.patient.person.gender" name="gender">
+        <label class="form-check-label" for="sexoF">Femenino</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="sexoM" value="M" [(ngModel)]="citaActual.patient.person.gender" name="gender">
+        <label class="form-check-label" for="sexoM">Masculino</label>
+      </div>
+    </div>
+  </div>
+</div>
           <!-- Información de Contacto -->
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="telefono" class="form-label">Teléfono</label>
-              <input type="text" id="telefono" class="form-control" [(ngModel)]="citaActual.telefono" name="telefono">
-            </div>
-          </div>
-
-          <!-- Información del Acompañante -->
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="dniAcompanante" class="form-label">DNI del Acompañante</label>
-              <input type="text" id="dniAcompanante" class="form-control" [(ngModel)]="citaActual.dniAcompanante" name="dniAcompanante">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="nombreAcompanante" class="form-label">Nombre del Acompañante</label>
-              <input type="text" id="nombreAcompanante" class="form-control" [(ngModel)]="citaActual.nombreAcompanante" name="nombreAcompanante">
+              <input type="text" id="telefono" class="form-control" [(ngModel)]="citaActual.patient.person.phone" name="telefono">
             </div>
           </div>
 
@@ -140,11 +149,11 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="motivoConsulta" class="form-label">Motivo de Consulta</label>
-              <textarea id="motivoConsulta" class="form-control" [(ngModel)]="citaActual.motivoConsulta" name="motivoConsulta"></textarea>
+              <textarea id="motivoConsulta" class="form-control" [(ngModel)]="citaActual.notes" name="motivoConsulta"></textarea>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="signosSintomas" class="form-label">Signos y Síntomas</label>
-              <textarea id="signosSintomas" class="form-control" [(ngModel)]="citaActual.signosSintomas" name="signosSintomas"></textarea>
+              <label for="signosSintomas" class="form-label">Nombre de Doctor</label>
+              <textarea id="signosSintomas" class="form-control" [(ngModel)]="citaActual.doctor.person.firstName" name="signosSintomas"></textarea>
             </div>
           </div>
         </form>

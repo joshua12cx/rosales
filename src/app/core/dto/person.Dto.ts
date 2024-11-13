@@ -1,6 +1,6 @@
-export interface Person {
-    idPerson: number;
+export interface PersonDTO {
     firstName: string;
+    lastName: string;
     lastNameFather: string;
     lastNameMother:String;
     gender: string;

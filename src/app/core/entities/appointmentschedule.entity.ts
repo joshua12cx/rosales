@@ -1,5 +1,5 @@
-export class AppointmentSchedule {
-  idSchedule: number = 0;
-  startTime: string = '';
-  endTime: string = '';
+export interface AppointmentSchedule {
+  idSchedule: number;
+  startTime: string;
+  endTime: string;
 }

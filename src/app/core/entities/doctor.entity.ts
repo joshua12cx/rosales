@@ -1,7 +1,7 @@
 import { Person } from "./person.entity";
 
-export class Doctor {
-  idDoctor: number = 0;
-  person: Person = new Person();
-  specialty: string = '';
+export interface Doctor {
+  idDoctor: number;
+  person: Person;                 // Relación
+  specialty: string;
 }

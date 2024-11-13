@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Patient } from '../entities/patient.entity';
 import { ApiResponse } from '../entities/apiresponse.entity';
+import { PatientDTO } from '../dto/patient.Dto';
+
 
 
 @Injectable({
@@ -11,25 +13,25 @@ import { ApiResponse } from '../entities/apiresponse.entity';
 export class PatientService {
   private apiUrl = 'http://localhost:8080/api/patients';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAll(): Observable<ApiResponse<Patient[]>> {
     return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}/getAll`);
   }
 
-  getById(id: number): Observable<ApiResponse<Patient>> {
+  getOne(id: number): Observable<ApiResponse<Patient>> {
     return this.http.get<ApiResponse<Patient>>(`${this.apiUrl}/getOne/${id}`);
   }
 
-  create(patient: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/create`, patient);
+  create(dto: PatientDTO): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/create`, dto);
   }
 
-  update(id: number, patient: any): Observable<ApiResponse<any>> {
-    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/update/${id}`, patient);
+  update(id: number, dto: PatientDTO): Observable<ApiResponse<void>> {
+    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/update/${id}`, dto);
   }
 
-  delete(id: number): Observable<ApiResponse<any>> {
-    return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/delete/${id}`);
+  delete(id: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/delete/${id}`);
   }
 }

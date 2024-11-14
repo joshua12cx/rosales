@@ -1,4 +1,5 @@
 export interface AppointmentDTO {
+    idappointment:number | null;
     appointmentDate: Date;
     appointmentDateEnd: Date;  // Cambiado a Date en lugar de string
     state: string;

@@ -3,13 +3,12 @@ import { Appointment } from '../../core/entities/appointment.entity';
 import { AppointmentService } from '../../core/services/appointment.service';
 import { ApiResponse } from '../../core/entities/apiresponse.entity';
 
-import { Doctor } from '../../core/entities/doctor.entity'; // Importa la entidad Doctor
-import { Patient } from '../../core/entities/patient.entity'; // Importa la entidad Patient
-import { Treatment } from '../../core/entities/treatment.entity'; // Importa la entidad Treatment
-
-import { PatientService } from '../../core/services/patient.service';
 import { DoctorService } from '../../core/services/doctor.service';
+import { PatientService } from '../../core/services/patient.service';
 import { TreatmentService } from '../../core/services/treatment.service';
+import { Doctor } from '../../core/entities/doctor.entity';
+import { Patient } from '../../core/entities/patient.entity';
+import { Treatment } from '../../core/entities/treatment.entity';
 import { AppointmentDTO } from '../../core/dto/appointment.Dto';
 
 declare var window: any;
@@ -21,9 +20,9 @@ declare var window: any;
 })
 export class CitasComponent implements OnInit {
   citas: Appointment[] = [];
-  doctores: Doctor[] = [];          // Declaración de doctores
-  pacientes: Patient[] = [];         // Declaración de pacientes
-  tratamientos: Treatment[] = [];    // Declaración de tratamientos
+  doctores: Doctor[] = [];
+  pacientes: Patient[] = [];
+  tratamientos: Treatment[] = [];
 
   filtroDNI: string = '';
   filtroFecha: string = '';
@@ -81,9 +80,10 @@ export class CitasComponent implements OnInit {
 
   inicializarCita(): AppointmentDTO {
     return {
+      idappointment: null,
       appointmentDate: new Date(),
       appointmentDateEnd: new Date(),
-      state: 'Pendiente', // Estado por defecto
+      state: 'Pendiente',
       notes: '',
       doctorId: null,
       patientId: null,
@@ -99,6 +99,7 @@ export class CitasComponent implements OnInit {
 
   editarCita(cita: Appointment) {
     this.citaActual = {
+      idappointment: cita.idAppointment,
       appointmentDate: cita.appointmentDate,
       appointmentDateEnd: cita.appointmentDateEnd,
       state: cita.state,
@@ -113,7 +114,8 @@ export class CitasComponent implements OnInit {
 
   guardarCita() {
     if (this.esEdicion) {
-      this.appointmentService.update(this.citaActual.patientId!, this.citaActual).subscribe(
+      // Usar `idappointment` para la URL de actualización
+      this.appointmentService.update(this.citaActual.idappointment!, this.citaActual).subscribe(
         () => {
           this.cargarCitas();
           this.modal.hide();
@@ -164,15 +166,5 @@ export class CitasComponent implements OnInit {
     const day = String(dateObj.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
-}
-prepararFechaParaGuardar(fecha: any): string | null {
-  const dateObj = fecha instanceof Date ? fecha : new Date(fecha);
-  
-  if (isNaN(dateObj.getTime())) {
-      return null; // Retorna `null` si la fecha no es válida
-  }
-
-  // Formatear la fecha a 'YYYY-MM-DD' para enviar al backend
-  return dateObj.toISOString().split('T')[0];
 }
 }

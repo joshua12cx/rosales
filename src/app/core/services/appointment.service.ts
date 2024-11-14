@@ -5,8 +5,6 @@ import { ApiResponse } from '../entities/apiresponse.entity';
 import { Appointment } from '../entities/appointment.entity';
 import { AppointmentDTO } from '../dto/appointment.Dto';
 
-
-
 @Injectable({
   providedIn: 'root'
 })

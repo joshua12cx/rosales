@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Patient } from '../../core/entities/patient.entity';
+import { Person } from '../../core/entities/person.entity';
+
+import { PatientService } from '../../core/services/patient.service';
+import { PatientDTO } from '../../core/dto/patient.Dto';
 declare var window: any;
 
 @Component({
@@ -6,59 +11,112 @@ declare var window: any;
   templateUrl: './pacientes.component.html',
   styleUrls: ['./pacientes.component.css']
 })
-export class PacientesComponent {
-  citas = [
-    { dni: '48573926', nombre: 'Mark', apellidos: 'Otto', nroHistoria: '10', estado: 'Pendiente', antecedentes: 'Diabetes' },
-    { dni: '95731682', nombre: 'Jacob', apellidos: 'Thornton', nroHistoria: '11', estado: 'Activa', antecedentes: 'Hipertensión' },
-    { dni: '12856347', nombre: 'Larry', apellidos: 'the Bird', nroHistoria: '12', estado: 'Terminada', antecedentes: 'Sin antecedentes' }
-  ];
-
-  filtroDNI: string = '';
-  filtroHC: string = '';
-  filtroNombre: string = '';
-  citaActual: any = {};
+export class PacientesComponent implements OnInit {
+  pacientes: Patient[] = [];
+  personas: Person[] = []; // Lista de personas
+  citaActual: PatientDTO = { personId: 0 };
   esEdicion: boolean = false;
+  filtroDNI: string = '';
+  filtroNombre: string = '';
   modal: any;
+
+  constructor(private patientService: PatientService) {}
 
   ngOnInit() {
     this.modal = new window.bootstrap.Modal(document.getElementById('citaModal'));
+    this.cargarPacientes();
+    this.cargarPersonas(); // Cargar personas al inicio
+  }
+
+  cargarPacientes() {
+    this.patientService.getAll().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.pacientes = response.data || [];
+        } else {
+          console.error('Error al cargar pacientes:', response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error en la conexión con el backend:', error);
+      }
+    });
+  }
+
+  cargarPersonas() {
+    this.patientService.getAllPersons().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.personas = response.data || [];
+        } else {
+          console.error('Error al cargar personas:', response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error en la conexión con el backend:', error);
+      }
+    });
   }
 
   openModal() {
-    this.citaActual = {};
+    this.citaActual = { personId: 0 }; // Resetear citaActual
     this.esEdicion = false;
     this.modal.show();
   }
 
-  editarCita(cita: any) {
-    this.citaActual = { ...cita };
+  editarCita(cita: Patient) {
+    this.citaActual = { personId: cita.person.idPerson }; // Usar solo personId
     this.esEdicion = true;
     this.modal.show();
   }
 
   guardarCita() {
     if (this.esEdicion) {
-      // Actualizar cita existente
-      const index = this.citas.findIndex(c => c.dni === this.citaActual.dni);
-      if (index !== -1) {
-        this.citas[index] = { ...this.citaActual };
-      }
+      this.patientService.update(this.citaActual.personId, this.citaActual).subscribe({
+        next: () => {
+          this.cargarPacientes();
+          this.modal.hide();
+        },
+        error: (error) => {
+          console.error('Error al actualizar paciente:', error);
+        }
+      });
     } else {
-      // Agregar nueva cita
-      this.citas.push({ ...this.citaActual });
+      this.patientService.create(this.citaActual).subscribe({
+        next: () => {
+          this.cargarPacientes();
+          this.modal.hide();
+        },
+        error: (error) => {
+          console.error('Error al crear paciente:', error);
+        }
+      });
     }
-    this.modal.hide();
   }
 
-  eliminarCita(index: number) {
-    this.citas.splice(index, 1);
+  eliminarCita(id: number) {
+    this.patientService.delete(id).subscribe({
+      next: () => {
+        this.cargarPacientes();
+      },
+      error: (error) => {
+        console.error('Error al eliminar paciente:', error);
+      }
+    });
   }
 
   filtrarCitas() {
-    return this.citas.filter(cita => 
-      (this.filtroDNI ? cita.dni.includes(this.filtroDNI) : true) &&
-      (this.filtroHC ? cita.nroHistoria.includes(this.filtroHC) : true) &&
-      (this.filtroNombre ? cita.nombre.toLowerCase().includes(this.filtroNombre.toLowerCase()) : true)
-    );
+    return this.pacientes.filter(paciente => {
+      const persona = this.personas.find(p => p.idPerson === paciente.person.idPerson);
+      return (
+        (this.filtroDNI ? persona?.dni.includes(this.filtroDNI) : true) &&
+        (this.filtroNombre ? persona?.firstName.toLowerCase().includes(this.filtroNombre.toLowerCase()) : true)
+      );
+    });
+  }
+
+  obtenerNombreCompleto(idPerson: number): string {
+    const persona = this.personas.find(p => p.idPerson === idPerson);
+    return persona ? `${persona.firstName} ${persona.lastNameFather} ${persona.lastNameMother}` : '';
   }
 }

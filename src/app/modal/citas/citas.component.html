@@ -40,7 +40,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let cita of filtrarCitas(); let i = index">
-        <td>{{ cita.idAppointment}}</td>
+        <td>{{ i +1}}</td>
         <td>{{ cita.patient.person.dni }}</td>
         <td>{{ cita.patient.person.firstName }}</td>
         <td>{{ cita.patient.person.lastNameFather }}{{ cita.patient.person.lastNameMother }}
@@ -118,14 +118,26 @@
             </div>
             <div class="col-md-6">
               <label for="fechaCita" class="form-label">Fecha Programada</label>
-              <input type="date" id="fechaCita" class="form-control" [(ngModel)]="citaActual.appointmentDate"
-                name="appointmentDate">
+              <input
+                type="date"
+                id="fechaCita"
+                class="form-control"
+                [(ngModel)]="citaActual.appointmentDate"
+                name="appointmentDate"
+              />
             </div>
             <div class="col-md-6">
-              <label for="fechaCita" class="form-label">Fecha terminada</label>
-              <input type="date" id="fechaCita" class="form-control" [(ngModel)]="citaActual.appointmentDateEnd"
-                name="appointmentDate">
+              <label for="fechaTerminada" class="form-label">Fecha Terminada</label>
+              <input
+                type="date"
+                id="fechaTerminada"
+                class="form-control"
+                [(ngModel)]="citaActual.appointmentDateEnd"
+                name="appointmentDateEnd"
+              />
             </div>
+            
+            
           </div>
 
           <!-- Estado de la Cita -->

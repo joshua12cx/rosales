@@ -12,11 +12,12 @@ import { PacientesComponent } from './modal/pacientes/pacientes.component';
 import { CitasComponent } from './modal/citas/citas.component';
 import { PagosComponent } from './modal/pagos/pagos.component';
 import { AjustesComponent } from './modal/ajustes/ajustes.component';
-import { PacienteModalComponent } from './modal/pacientes/paciente-modal/paciente-modal.component';
+
 import { ModalComponent } from './components/modal/modal.component';
 import { HistoriasComponent } from './modal/historias/historias.component';
 import { AgendaComponent } from './modal/agenda/agenda.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PersonaComponent } from './modal/persona/persona.component';
 
 
 @NgModule({
@@ -30,10 +31,11 @@ import { HttpClientModule } from '@angular/common/http';
     CitasComponent,
     PagosComponent,
     AjustesComponent,
-    PacienteModalComponent,
+    PacientesComponent,
     ModalComponent,
     HistoriasComponent,
     AgendaComponent,
+    PersonaComponent,
   
 
   ],

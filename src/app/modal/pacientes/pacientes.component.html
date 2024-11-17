@@ -1,15 +1,11 @@
-<div class="container mt-4">
+<!-- <div class="container mt-4">
     <h2 class="mb-4"><i class="bi bi-people me-2"></i>Pacientes</h2>
-    <!-- Formulario de búsqueda -->
+    
 
     <div class="row mb-3 p-3 rounded bg-light">
         <div class="col-md-3">
             <input type="text" class="form-control" placeholder="DNI" [(ngModel)]="filtroDNI"
                 aria-label="Búsqueda por DNI">
-        </div>
-        <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Ingrese el número de H.C" [(ngModel)]="filtroHC"
-                aria-label="Búsqueda por H.C">
         </div>
         <div class="col-md-3">
             <input type="text" class="form-control" placeholder="Ingrese los nombres" [(ngModel)]="filtroNombre"
@@ -21,36 +17,29 @@
     </div>
 
     <!-- Tabla de pacientes -->
-    <table class="table table-striped align-middle">
-        <thead class="table-light">
+    <!-- <table class="table table-striped align-middle"> 
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">DNI</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellidos</th>
-                <th scope="col">Nro de Historia</th>
-                <th scope="col">Antecedentes</th>
-                <th scope="col">Estado</th>
                 <th scope="col">Opciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let cita of filtrarCitas(); let i = index">
+            <tr *ngFor="let paciente of filtrarCitas(); let i = index">
                 <th scope="row">{{ i + 1 }}</th>
-                <td>{{ cita.dni }}</td>
-                <td>{{ cita.nombre }}</td>
-                <td>{{ cita.apellidos }}</td>
-                <td>{{ cita.nroHistoria }}</td>
-                <td>{{ cita.antecedentes || 'Sin antecedentes' }}</td>
-                <td>{{ cita.estado }}</td>
+                <td>{{ paciente.person.dni }}</td>
+                <td>{{ paciente.person.firstName }}</td>
+                <td>{{ paciente.person.lastNameFather }} {{ paciente.person.lastNameMother }}</td>
                 <td class="text-center">
                     <div class="btn-group">
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           <i class="bi bi-three-dots-vertical"></i>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" (click)="editarCita(cita)">Editar</a></li>
-                            <li><a class="dropdown-item text-danger" (click)="eliminarCita(i)">Eliminar</a></li>
+                            <li><a class="dropdown-item" (click)="editarCita(paciente)">Editar</a></li>
+                            <li><a class="dropdown-item text-danger" (click)="eliminarCita(paciente.idPatient)">Eliminar</a></li>
                         </ul>
                     </div>
                 </td>
@@ -59,50 +48,37 @@
     </table>
 </div>
 
-<!-- Modal -->
+
 <div class="modal fade" id="citaModal" tabindex="-1" aria-labelledby="citaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="citaModalLabel">{{ esEdicion ? 'Editar Paciente' : 'Registrar Nuevo
-                    Paciente' }}</h5>
+                <h5 class="modal-title" id="citaModalLabel">{{ esEdicion ? 'Editar Paciente' : 'Registrar Nuevo Paciente' }} </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Formulario de Cita -->
+               
                 <form>
                     <div class="row">
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="dni" class="form-label">DNI</label>
-                            <input type="text" id="dni" class="form-control" [(ngModel)]="citaActual.dni" name="dni">
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="nroHistoria" class="form-label">Nro de Historia</label>
-                            <input type="text" id="nroHistoria" class="form-control"
-                                [(ngModel)]="citaActual.nroHistoria" name="nroHistoria">
+                            <input type="text" id="dni" class="form-control" [(ngModel)]="citaActual.personId" name="dni">
                         </div>
                     </div>
-                    <!-- Campos de información personal -->
+                 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" id="nombre" class="form-control" [(ngModel)]="citaActual.nombre"
+                            <input type="text" id="nombre" class="form-control" [(ngModel)]="citaActual.personId"
                                 name="nombre">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="apellidos" class="form-label">Apellidos</label>
-                            <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.apellidos"
+                            <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.personId"
                                 name="apellidos">
                         </div>
                     </div>
-                    <!-- Antecedentes -->
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label for="antecedentes" class="form-label">Antecedentes</label>
-                            <textarea id="antecedentes" class="form-control" [(ngModel)]="citaActual.antecedentes"
-                                name="antecedentes"></textarea>
-                        </div>
-                    </div>
+                  
                 </form>
             </div>
             <div class="modal-footer">
@@ -112,4 +88,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

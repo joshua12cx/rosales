@@ -1,0 +1,111 @@
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="bi bi-people me-2"></i>Personas</h2>
+    
+    <!-- Formulario de búsqueda -->
+    <div class="row mb-3 p-3 rounded bg-light">
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="DNI" [(ngModel)]="filtroDNI"
+                aria-label="Búsqueda por DNI">
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Ingrese los nombres" [(ngModel)]="filtroNombre"
+                aria-label="Búsqueda por nombres">
+        </div>
+        <div class="col-md-3 text-end">
+            <button class="btn btn-primary btn-lg" (click)="openModal()">Registrar Nueva Persona</button>
+        </div>
+    </div>
+
+    <!-- Tabla de personas -->
+    <table class="table table-striped align-middle">
+        <thead class="table-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Género</th>
+                <th scope="col">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let persona of filtrarPersonas(); let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ persona.dni }}</td>
+                <td>{{ persona.firstName }}</td>
+                <td>{{ persona.lastNameFather }} {{ persona.lastNameMother }}</td>
+                <td>{{ persona.gender === 'M' ? 'Masculino' : 'Femenino' }}</td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" (click)="editarPersona(persona)">Editar</a></li>
+                            <li><a class="dropdown-item text-danger" (click)="eliminarPersona(persona.idPerson)">Eliminar</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="personaModal" tabindex="-1" aria-labelledby="personaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="personaModalLabel">{{ esEdicion ? 'Editar Persona' : 'Registrar Nueva Persona' }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de Persona -->
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input type="text" id="dni" class="form-control" [(ngModel)]="personaActual.dni" name="dni">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">Nombre</label>
+                            <input type="text" id="firstName" class="form-control" [(ngModel)]="personaActual.firstName"
+                                name="firstName">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="lastNameFather" class="form-label">Apellido Paterno</label>
+                            <input type="text" id="lastNameFather" class="form-control" [(ngModel)]="personaActual.lastNameFather"
+                                name="lastNameFather">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastNameMother" class="form-label">Apellido Materno</label>
+                            <input type="text" id="lastNameMother" class="form-control" [(ngModel)]="personaActual.lastNameMother"
+                                name="lastNameMother">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="gender" class="form-label">Género</label>
+                            <select id="gender" class="form-control" [(ngModel)]="personaActual.gender" name="gender">
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="birthDate" class="form-label">Fecha de Nacimiento</label>
+                            <input type="date" id="birthDate" class="form-control" [(ngModel)]="personaActual.birthDate"
+                                name="birthDate">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" (click)="guardarPersona()">{{ esEdicion ? 'Actualizar' :
+                    'Guardar' }}</button>
+            </div>
+        </div>
+    </div>
+</div>

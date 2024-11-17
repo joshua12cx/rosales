@@ -100,8 +100,8 @@ export class CitasComponent implements OnInit {
   editarCita(cita: Appointment) {
     this.citaActual = {
       idappointment: cita.idAppointment,
-      appointmentDate: cita.appointmentDate,
-      appointmentDateEnd: cita.appointmentDateEnd,
+      appointmentDate: cita.appointmentDate, // Usar fecha directamente
+      appointmentDateEnd: cita.appointmentDateEnd, // Usar fecha directamente
       state: cita.state,
       notes: cita.notes || '',
       doctorId: cita.doctor.idDoctor,
@@ -111,6 +111,8 @@ export class CitasComponent implements OnInit {
     this.esEdicion = true;
     this.modal.show();
   }
+  
+  
 
   guardarCita() {
     if (this.esEdicion) {
@@ -167,4 +169,5 @@ export class CitasComponent implements OnInit {
 
     return `${year}-${month}-${day}`;
 }
+
 }

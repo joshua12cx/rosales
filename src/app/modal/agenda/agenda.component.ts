@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { AppointmentService } from '../../core/services/appointment.service';
+import { Appointment } from '../../core/entities/appointment.entity';
 
 interface Day {
   date: Date;
   otherMonth: boolean;
-  events: { date: Date; title: string; time: string }[]; // Incluye la propiedad time
+  events: { title: string; time: string }[];
 }
 
 @Component({
@@ -22,38 +24,46 @@ export class AgendaComponent implements OnInit {
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
   weekDays: string[] = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
-  calendar: Day[][] = []; // Matriz para la vista mensual
-  weekDates: Date[] = []; // Fechas para la vista semanal
-  hours: string[] = Array.from({ length: 24 }, (_, i) => `${i}:00`); // Horas del día
+  calendar: Day[][] = [];
+  weekDates: Date[] = [];
+  hours: string[] = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+  events: any[] = []; // Aquí se almacenarán las citas del backend
 
-  events = [
-    { date: new Date(2024, 10, 8, 10, 0), title: '3 tareas pendientes', time: '10:00' },
-    { date: new Date(2024, 10, 1, 9, 0), title: 'Día de Todos los Santos', time: '09:00' },
-    { date: new Date(2024, 10, 2, 14, 30), title: 'Los Fieles Difuntos', time: '14:30' }
-  ];
+  constructor(private appointmentService: AppointmentService) {}
 
   ngOnInit() {
+    this.loadAppointments();
     this.generateCalendar();
   }
 
-  setView(view: string) {
-    this.viewType = view;
-    if (view === 'Mes') {
-      this.generateCalendar();
-    } else if (view === 'Semana') {
-      this.generateWeek();
-    } else if (view === 'Día') {
-      this.selectedDate = new Date(this.currentYear, this.currentMonth, this.currentDay);
-    }
+  // Cargar citas desde el backend
+  loadAppointments() {
+    this.appointmentService.getAll().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.events = response.data.map((appointment: Appointment) => ({
+            date: new Date(appointment.appointmentDate),
+            title: appointment.notes || `Cita con ${appointment.patient.person.firstName} ${appointment.patient.person.lastNameFather}`,
+            time: `${appointment.appointmentDate} - ${appointment.appointmentDateEnd}`,
+          }));
+          this.generateCalendar(); // Regenera el calendario con las citas
+        } else {
+          console.error('Error al cargar citas:', response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error en la conexión con el backend:', error);
+      },
+    });
   }
 
+  // Generar calendario mensual
   generateCalendar() {
     const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1).getDay();
     const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
     let date = 1 - firstDayOfMonth;
 
     this.calendar = [];
-
     for (let week = 0; week < 6; week++) {
       const weekArray: Day[] = [];
       for (let day = 0; day < 7; day++) {
@@ -61,7 +71,6 @@ export class AgendaComponent implements OnInit {
         const eventsForDay = this.events.filter(event =>
           event.date.toDateString() === currentDate.toDateString()
         );
-
         weekArray.push({
           date: currentDate,
           otherMonth: currentDate.getMonth() !== this.currentMonth,
@@ -73,6 +82,7 @@ export class AgendaComponent implements OnInit {
     }
   }
 
+  // Generar vista semanal
   generateWeek() {
     const startOfWeek = new Date(this.currentYear, this.currentMonth, this.currentDay - new Date(this.currentYear, this.currentMonth, this.currentDay).getDay());
     this.weekDates = Array.from({ length: 7 }, (_, i) => {
@@ -82,6 +92,41 @@ export class AgendaComponent implements OnInit {
     });
   }
 
+  // Cambiar vista
+  setView(view: string) {
+    this.viewType = view;
+    if (view === 'Mes') {
+      this.generateCalendar();
+    } else if (view === 'Semana') {
+      this.generateWeek();
+    } else if (view === 'Día') {
+      this.selectedDate = new Date(this.currentYear, this.currentMonth, this.currentDay);
+    }
+  }
+
+  // Navegar al mes anterior
+  prevMonth() {
+    if (this.currentMonth === 0) {
+      this.currentMonth = 11;
+      this.currentYear--;
+    } else {
+      this.currentMonth--;
+    }
+    this.generateCalendar();
+  }
+
+  // Navegar al mes siguiente
+  nextMonth() {
+    if (this.currentMonth === 11) {
+      this.currentMonth = 0;
+      this.currentYear++;
+    } else {
+      this.currentMonth++;
+    }
+    this.generateCalendar();
+  }
+
+  // Navegar al día o semana anterior
   prevView() {
     if (this.viewType === 'Mes') {
       this.prevMonth();
@@ -94,6 +139,7 @@ export class AgendaComponent implements OnInit {
     }
   }
 
+  // Navegar al día o semana siguiente
   nextView() {
     if (this.viewType === 'Mes') {
       this.nextMonth();
@@ -106,6 +152,7 @@ export class AgendaComponent implements OnInit {
     }
   }
 
+  // Título de la vista actual
   getTitle(): string {
     if (this.viewType === 'Mes') {
       return `${this.monthNames[this.currentMonth]} de ${this.currentYear}`;
@@ -117,6 +164,7 @@ export class AgendaComponent implements OnInit {
     return '';
   }
 
+  // Rango de la semana
   getWeekRange(): string {
     const startOfWeek = new Date(this.currentYear, this.currentMonth, this.currentDay - new Date(this.currentYear, this.currentMonth, this.currentDay).getDay());
     const endOfWeek = new Date(startOfWeek);
@@ -124,26 +172,7 @@ export class AgendaComponent implements OnInit {
     return `${startOfWeek.toLocaleDateString()} - ${endOfWeek.toLocaleDateString()}`;
   }
 
-  prevMonth() {
-    if (this.currentMonth === 0) {
-      this.currentMonth = 11;
-      this.currentYear--;
-    } else {
-      this.currentMonth--;
-    }
-    this.generateCalendar();
-  }
-
-  nextMonth() {
-    if (this.currentMonth === 11) {
-      this.currentMonth = 0;
-      this.currentYear++;
-    } else {
-      this.currentMonth++;
-    }
-    this.generateCalendar();
-  }
-
+  // Verificar si un día es el día actual
   isToday(day: Day): boolean {
     const today = new Date();
     return (
@@ -153,8 +182,9 @@ export class AgendaComponent implements OnInit {
     );
   }
 
+  // Seleccionar una fecha
   selectDate(day: Day) {
-    console.log("Fecha seleccionada:", day.date);
-    console.log("Eventos para esta fecha:", day.events); // Muestra eventos con hora
+    console.log('Fecha seleccionada:', day.date);
+    console.log('Eventos para esta fecha:', day.events);
   }
 }

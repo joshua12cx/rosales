@@ -1,91 +1,94 @@
-<!-- <div class="container mt-4">
-    <h2 class="mb-4"><i class="bi bi-people me-2"></i>Pacientes</h2>
-    
-
-    <div class="row mb-3 p-3 rounded bg-light">
-        <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="DNI" [(ngModel)]="filtroDNI"
-                aria-label="Búsqueda por DNI">
-        </div>
-        <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Ingrese los nombres" [(ngModel)]="filtroNombre"
-                aria-label="Búsqueda por nombres">
-        </div>
-        <div class="col-md-3 text-end">
-            <button class="btn btn-primary btn-lg" (click)="openModal()">Registrar Nuevo Paciente</button>
-        </div>
+<div class="container mt-4">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold">Pacientes</h2>
+      <button class="btn btn-dark" (click)="openModal()">Registrar Paciente</button>
     </div>
-
-    <!-- Tabla de pacientes -->
-    <!-- <table class="table table-striped align-middle"> 
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">DNI</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellidos</th>
-                <th scope="col">Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let paciente of filtrarCitas(); let i = index">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ paciente.person.dni }}</td>
-                <td>{{ paciente.person.firstName }}</td>
-                <td>{{ paciente.person.lastNameFather }} {{ paciente.person.lastNameMother }}</td>
-                <td class="text-center">
-                    <div class="btn-group">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" (click)="editarCita(paciente)">Editar</a></li>
-                            <li><a class="dropdown-item text-danger" (click)="eliminarCita(paciente.idPatient)">Eliminar</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
+  
+    <!-- Filtros -->
+    <div class="row mb-4">
+      <div class="col-md-2">
+        <input type="text" class="form-control" placeholder="DNI" [(ngModel)]="filtroDNI">
+      </div>
+      <div class="col-md-2">
+        <input type="text" class="form-control" placeholder="Nombre" [(ngModel)]="filtroNombre">
+      </div>
+    </div>
+  
+    <!-- Tabla -->
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellidos</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Teléfono</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let paciente of filtrarPacientes(); let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ paciente.person.dni }}</td>
+          <td>{{ paciente.person.firstName }}</td>
+          <td>{{ paciente.person.lastNameFather }} {{ paciente.person.lastNameMother }}</td>
+          <td>{{ paciente.person.birthDate | date: 'yyyy-MM-dd' }}</td>
+          <td>{{ paciente.person.phone }}</td>
+          <td>
+            <div class="btn-group">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" (click)="editarPaciente(paciente)">Editar</a></li>
+                  <li><a class="dropdown-item" (click)="eliminarPaciente(paciente.idPatient)">Eliminar</a></li>
+                </ul>
+              </div>          
+            </td>
+        </tr>
+      </tbody>
     </table>
-</div>
-
-
-<div class="modal fade" id="citaModal" tabindex="-1" aria-labelledby="citaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+  
+    <!-- Modal -->
+    <div class="modal fade" id="pacienteModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="citaModalLabel">{{ esEdicion ? 'Editar Paciente' : 'Registrar Nuevo Paciente' }} </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-header">
+            <h5 class="modal-title">{{ esEdicion ? 'Editar Paciente' : 'Registrar Paciente' }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+                <label for="persona" class="form-label">Seleccionar Persona</label>
+                <select
+                  id="persona"
+                  class="form-control"
+                  [(ngModel)]="pacienteActual.personId"
+                  (change)="seleccionarPersona($event)">
+                  <option *ngFor="let persona of personas" [value]="persona.idPerson">
+                    {{ persona.firstName }} {{ persona.lastNameFather }} {{ persona.lastNameMother }}
+                  </option>
+                </select>
+              </div>
+              
+            <!-- Mostrar datos de la persona seleccionada -->
+            <div *ngIf="personaSeleccionada">
+              <p><strong>DNI:</strong> {{ personaSeleccionada.dni }}</p>
+              <p><strong>Nombre:</strong> {{ personaSeleccionada.firstName }}</p>
+              <p><strong>Apellidos:</strong> {{ personaSeleccionada.lastNameFather }} {{ personaSeleccionada.lastNameMother }}</p>
+              <p><strong>Teléfono:</strong> {{ personaSeleccionada.phone }}</p>
+              <p><strong>Fecha de Nacimiento:</strong> {{ personaSeleccionada.birthDate | date: 'yyyy-MM-dd' }}</p>
             </div>
-            <div class="modal-body">
-               
-                <form>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="dni" class="form-label">DNI</label>
-                            <input type="text" id="dni" class="form-control" [(ngModel)]="citaActual.personId" name="dni">
-                        </div>
-                    </div>
-                 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" id="nombre" class="form-control" [(ngModel)]="citaActual.personId"
-                                name="nombre">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="apellidos" class="form-label">Apellidos</label>
-                            <input type="text" id="apellidos" class="form-control" [(ngModel)]="citaActual.personId"
-                                name="apellidos">
-                        </div>
-                    </div>
-                  
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" (click)="guardarCita()">{{ esEdicion ? 'Actualizar' :
-                    'Guardar' }}</button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" (click)="guardarPaciente()">Guardar</button>
+          </div>
         </div>
+      </div>
     </div>
-</div> -->
+  </div>
+  

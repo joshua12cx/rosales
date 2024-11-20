@@ -12,15 +12,15 @@
                 aria-label="Búsqueda por nombres">
         </div>
         <div class="col-md-3 text-end">
-            <button class="btn btn-primary btn-lg" (click)="openModal()">Registrar Nueva Persona</button>
+            <button class="btn btn-primary btn-lg" (click)="openModal()">Registrar Persona</button>
         </div>
     </div>
 
     <!-- Tabla de personas -->
-    <table class="table table-striped align-middle">
-        <thead class="table-light">
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <th scope="col">#</th>
+                <th >#</th>
                 <th scope="col">DNI</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellidos</th>
@@ -94,10 +94,22 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label for="address" class="form-label">direccion: </label>
+                            <input type="text" id="address" class="form-control" [(ngModel)]="personaActual.address"
+                                name="address">
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="birthDate" class="form-label">Fecha de Nacimiento</label>
                             <input type="date" id="birthDate" class="form-control" [(ngModel)]="personaActual.birthDate"
                                 name="birthDate">
                         </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Teléfono</label>
+                                <input type="text" id="phone" class="form-control" [(ngModel)]="personaActual.phone" name="phone" placeholder="Ingrese el número de celular">
+                            </div>
+                        </div>
+                        
                     </div>
                 </form>
             </div>

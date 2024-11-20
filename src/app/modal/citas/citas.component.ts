@@ -140,9 +140,20 @@ export class CitasComponent implements OnInit {
   }
 
   eliminarCita(id: number) {
-    this.appointmentService.delete(id).subscribe(() => {
-      this.cargarCitas();
-    });
+    if(confirm('¿Estas seguro de que deseas eliminar este paciente?')){
+    this.appointmentService.delete(id).subscribe({
+      next: () => {
+        alert('¿estas seguro que quieres eliminar esta cita?');
+       this.cargarCitas(); 
+      },
+      error: (error) => {
+        console.error('Error al eliminar el cita:', error);
+alert('ocurrio un error al intentar eliminar cita')
+      }
+      
+    }
+  );
+}
   }
 
   filtrarCitas() {

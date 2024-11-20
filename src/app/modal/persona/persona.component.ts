@@ -19,6 +19,7 @@ export class PersonaComponent implements OnInit {
     lastNameMother: '',
     gender: 'M',
     birthDate: new Date(),
+    phone: '', // Inicializamos el campo phone
     dni: '',
     address: '',
   };
@@ -55,6 +56,7 @@ export class PersonaComponent implements OnInit {
       lastNameMother: '',
       gender: 'M',
       birthDate: new Date(),
+      phone: '', // Reseteamos el campo phone
       dni: '',
       address: '',
     };
@@ -63,7 +65,7 @@ export class PersonaComponent implements OnInit {
   }
 
   editarPersona(persona: Person) {
-    this.personaActual = { ...persona };
+    this.personaActual = { ...persona }; // Incluye el campo phone automáticamente
     this.esEdicion = true;
     this.modal.show();
   }
@@ -93,10 +95,17 @@ export class PersonaComponent implements OnInit {
   }
 
   eliminarPersona(id: number) {
+    if(confirm('¿Estas seguro e que desea eliminar esta Persona?')){
     this.personService.delete(id).subscribe({
-      next: () => this.cargarPersonas(),
-      error: (error) => console.error('Error al eliminar persona:', error),
+      next: () =>{
+        alert('Persona eliminada cone exito?');
+        this.cargarPersonas();
+      },
+      error: (error) =>{ console.error('Error al eliminar persona:', error);
+     alert('Ocurrio un error al intentar eliminar al paciente');
+      }
     });
+  }
   }
 
   filtrarPersonas() {

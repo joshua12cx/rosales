@@ -28,22 +28,22 @@
     <thead class="table-light">
       <tr>
         <th>#</th>
-        <th>DNI</th>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>Doctor</th>
-        <th>Fecha Ini</th>
-        <th>Fecha fin</th>
-        <th>Estado</th>
-        <th>Opciones</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellidos</th>
+        <th scope="col">Doctor</th>
+        <th scope="col">Fecha Ini</th>
+        <th scope="col">Fecha fin</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Opciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let cita of filtrarCitas(); let i = index">
-        <td>{{ i +1}}</td>
+        <td scope="row">{{ i +1}}</td>
         <td>{{ cita.patient.person.dni }}</td>
         <td>{{ cita.patient.person.firstName }}</td>
-        <td>{{ cita.patient.person.lastNameFather }}{{ cita.patient.person.lastNameMother }}
+        <td>{{ cita.patient.person.lastNameFather }} {{ cita.patient.person.lastNameMother }} </td>
         <td>{{cita.doctor.person.firstName}}</td>
         <td>{{ cita.appointmentDate | date: 'dd-M-yyyy' }}</td>
         <td>{{ cita.appointmentDateEnd | date: 'dd-M-yyyy'  }}</td>

@@ -21,7 +21,8 @@ export class PacientesComponent implements OnInit {
   filtroApellido: string = '';
   filtroFechaNacimiento: string = '';
   filtroTelefono: string = '';
-  pacienteActual: PatientDTO = { personId: 0 };
+  pacienteActual: PatientDTO = { idPatient: 0, personId: 0 };
+
   personaSeleccionada: Person | null = null;
   esEdicion: boolean = false;
   modal: any;
@@ -60,11 +61,15 @@ export class PacientesComponent implements OnInit {
   }
 
   openModal() {
-    this.pacienteActual = { personId: 0 };
+    this.pacienteActual = {
+      idPatient: 0, // ID predeterminado para creación
+      personId: 0 // Sin persona seleccionada aún
+    };
     this.personaSeleccionada = null;
     this.esEdicion = false;
     this.modal.show();
   }
+  
 
   seleccionarPersona(event: Event) {
     const target = event.target as HTMLSelectElement | null;
@@ -77,24 +82,42 @@ export class PacientesComponent implements OnInit {
 
   guardarPaciente() {
     if (this.esEdicion) {
-      console.error('Edición de pacientes aún no implementada');
+      // Si estamos en modo edición, se actualiza el paciente existente
+      this.patientService.update(this.pacienteActual.idPatient, this.pacienteActual).subscribe({
+        next: () => {
+          this.cargarPacientes();
+          this.modal.hide();
+          alert('Paciente actualizado con éxito.');
+        },
+        error: (err) => {
+          console.error('Error al actualizar paciente:', err);
+          alert('Error al actualizar el paciente.');
+        }
+      });
     } else {
+      // Si no estamos en modo edición, se crea un nuevo paciente
       this.patientService.create(this.pacienteActual).subscribe({
         next: () => {
           this.cargarPacientes();
           this.modal.hide();
+          alert('Paciente registrado con éxito.');
         },
-        error: (err) => console.error('Error al guardar paciente:', err)
+        error: (err) => {
+          console.error('Error al guardar paciente:', err);
+          alert('Error al registrar el paciente.');
+        }
       });
     }
   }
+  
 
   filtrarPacientes() {
     return this.pacientes.filter(paciente =>
       (this.filtroNombre ? paciente.person.firstName.toLowerCase().includes(this.filtroNombre.toLowerCase()) : true) &&
-      (this.filtroDNI ? paciente.person.dni.includes(this.filtroDNI) : true) 
+      (this.filtroDNI ? paciente.person.dni.includes(this.filtroDNI) : true)
     );
   }
+  
 
   formatearFecha(fecha: Date): string {
     const year = fecha.getFullYear();
@@ -105,12 +128,14 @@ export class PacientesComponent implements OnInit {
 
   editarPaciente(paciente: Patient) {
     this.pacienteActual = {
-      personId: paciente.person.idPerson
+      idPatient: paciente.idPatient, // Asigna el ID del paciente
+      personId: paciente.person.idPerson // Relación con la persona
     };
-    this.personaSeleccionada = paciente.person;
-    this.esEdicion = true;
+    this.personaSeleccionada = paciente.person; // Muestra detalles de la persona
+    this.esEdicion = true; // Cambia a modo edición
     this.modal.show();
   }
+  
 
   eliminarPaciente(idPatient: number) {
     if (confirm('¿Estás seguro de que deseas eliminar este paciente?')) {

@@ -30,7 +30,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let paciente of filtrarPacientes(); let i = index">
-          <td>{{ i + 1 }}</td>
+          <td>{{i + 1}}</td>
           <td>{{ paciente.person.dni }}</td>
           <td>{{ paciente.person.firstName }}</td>
           <td>{{ paciente.person.lastNameFather }} {{ paciente.person.lastNameMother }}</td>
@@ -62,18 +62,18 @@
           </div>
           <div class="modal-body">
             <div class="mb-3">
-                <label for="persona" class="form-label">Seleccionar Persona</label>
-                <select
-                  id="persona"
-                  class="form-control"
-                  [(ngModel)]="pacienteActual.personId"
-                  (change)="seleccionarPersona($event)">
-                  <option *ngFor="let persona of personas" [value]="persona.idPerson">
-                    {{ persona.firstName }} {{ persona.lastNameFather }} {{ persona.lastNameMother }}
-                  </option>
-                </select>
-              </div>
-              
+              <label for="persona" class="form-label">Seleccionar Persona</label>
+              <select
+                id="persona"
+                class="form-control"
+                [(ngModel)]="pacienteActual.personId"
+                (change)="seleccionarPersona($event)">
+                <option *ngFor="let persona of personas" [value]="persona.idPerson">
+                  {{ persona.firstName }} {{ persona.lastNameFather }} {{ persona.lastNameMother }}
+                </option>
+              </select>
+            </div>
+          
             <!-- Mostrar datos de la persona seleccionada -->
             <div *ngIf="personaSeleccionada">
               <p><strong>DNI:</strong> {{ personaSeleccionada.dni }}</p>
@@ -83,6 +83,7 @@
               <p><strong>Fecha de Nacimiento:</strong> {{ personaSeleccionada.birthDate | date: 'yyyy-MM-dd' }}</p>
             </div>
           </div>
+          
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-primary" (click)="guardarPaciente()">Guardar</button>

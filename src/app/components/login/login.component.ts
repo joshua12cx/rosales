@@ -1,26 +1,35 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
+
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
 })
 export class LoginComponent {
   credentials = {
-    email: '',
+    username: '',
     password: ''
   };
   rememberMe: boolean = false;
+  errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  login() {
-    // Lógica de autenticación
-    if (this.credentials.email === 'admin' && this.credentials.password === 'admin') {
-      // Redireccionar a la página principal después de iniciar sesión
-      this.router.navigate(['/home']);
-    } else {
-      alert('Credenciales incorrectas');
-    }
+  login(): void {
+    this.authService.login(this.credentials.username, this.credentials.password).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.router.navigate(['/home']); // Redirige al home si es exitoso
+        } else {
+          this.errorMessage = 'Credenciales incorrectas';
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Error interno en el servidor.';
+      },
+    });
   }
 }

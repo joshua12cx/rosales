@@ -28,6 +28,7 @@ export class AgendaComponent implements OnInit {
   weekDates: Date[] = [];
   hours: string[] = Array.from({ length: 24 }, (_, i) => `${i}:00`);
   events: any[] = []; // Aquí se almacenarán las citas del backend
+  dateFormatter = new Intl.DateTimeFormat('es-ES', { dateStyle: 'short' });
 
   constructor(private appointmentService: AppointmentService) {}
 
@@ -44,7 +45,7 @@ export class AgendaComponent implements OnInit {
           this.events = response.data.map((appointment: Appointment) => ({
             date: new Date(appointment.appointmentDate),
             title: appointment.notes || `Cita con ${appointment.patient.person.firstName} ${appointment.patient.person.lastNameFather}`,
-            time: `${appointment.appointmentDate } - ${appointment.appointmentDateEnd}`,
+            time: `${this.formatTime(appointment.appointmentDate)} - ${this.formatTime(appointment.appointmentDateEnd)}`,
           }));
           this.generateCalendar(); // Regenera el calendario con las citas
         } else {
@@ -69,7 +70,7 @@ export class AgendaComponent implements OnInit {
       for (let day = 0; day < 7; day++) {
         const currentDate = new Date(this.currentYear, this.currentMonth, date);
         const eventsForDay = this.events.filter(event =>
-          event.date.toDateString() === currentDate.toDateString()
+          this.isSameDate(event.date, currentDate)
         );
         weekArray.push({
           date: currentDate,
@@ -159,7 +160,7 @@ export class AgendaComponent implements OnInit {
     } else if (this.viewType === 'Semana') {
       return `Semana del ${this.getWeekRange()}`;
     } else if (this.viewType === 'Día') {
-      return `Día ${this.selectedDate.toLocaleDateString()}`;
+      return `Día ${this.dateFormatter.format(this.selectedDate)}`;
     }
     return '';
   }
@@ -169,22 +170,33 @@ export class AgendaComponent implements OnInit {
     const startOfWeek = new Date(this.currentYear, this.currentMonth, this.currentDay - new Date(this.currentYear, this.currentMonth, this.currentDay).getDay());
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(endOfWeek.getDate() + 6);
-    return `${startOfWeek.toLocaleDateString()} - ${endOfWeek.toLocaleDateString()}`;
+    return `${this.dateFormatter.format(startOfWeek)} - ${this.dateFormatter.format(endOfWeek)}`;
+  }
+
+  // Comparar fechas (sin horas)
+  isSameDate(date1: Date, date2: Date): boolean {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }
+
+  // Formatear hora
+  formatTime(date: string | Date): string {
+    const parsedDate = new Date(date);
+    return parsedDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
   }
 
   // Verificar si un día es el día actual
   isToday(day: Day): boolean {
     const today = new Date();
-    return (
-      day.date.getDate() === today.getDate() &&
-      day.date.getMonth() === today.getMonth() &&
-      day.date.getFullYear() === today.getFullYear()
-    );
+    return this.isSameDate(today, day.date);
   }
 
   // Seleccionar una fecha
   selectDate(day: Day) {
-    console.log('Fecha seleccionada:', day.date);
+    console.log('Fecha seleccionada:', this.dateFormatter.format(day.date));
     console.log('Eventos para esta fecha:', day.events);
   }
 }

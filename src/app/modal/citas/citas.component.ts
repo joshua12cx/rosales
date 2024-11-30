@@ -165,20 +165,20 @@ alert('ocurrio un error al intentar eliminar cita')
   }
 
   formatearFecha(fecha: any): string {
-    // Asegurarse de que `fecha` es un objeto `Date` válido
     const dateObj = fecha instanceof Date ? fecha : new Date(fecha);
-
-    // Validar que `dateObj` es una fecha válida
     if (isNaN(dateObj.getTime())) {
-        return ''; // Retorna una cadena vacía si `fecha` no es válida
+      return ''; // Retorna una cadena vacía si la fecha no es válida
     }
-
-    // Formatea la fecha a 'YYYY-MM-DD'
+  
+    // Sumar un día a la fecha antes de mostrarla
+    dateObj.setDate(dateObj.getDate() + 1);
+  
     const year = dateObj.getFullYear();
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
     const day = String(dateObj.getDate()).padStart(2, '0');
-
+  
     return `${year}-${month}-${day}`;
-}
+  }
+  
 
 }

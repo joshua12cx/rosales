@@ -44,7 +44,7 @@ export class AgendaComponent implements OnInit {
           this.events = response.data.map((appointment: Appointment) => ({
             date: new Date(appointment.appointmentDate),
             title: appointment.notes || `Cita con ${appointment.patient.person.firstName} ${appointment.patient.person.lastNameFather}`,
-            time: `${appointment.appointmentDate} - ${appointment.appointmentDateEnd}`,
+            time: `${appointment.appointmentDate } - ${appointment.appointmentDateEnd}`,
           }));
           this.generateCalendar(); // Regenera el calendario con las citas
         } else {
